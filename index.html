@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استراحة شبكتي - منصة الترفيه الشاملة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4682B4;
+      --secondary: #5F9EA0;
+      --accent: #20B2AA;
+      --light: #F0F8FF;
+      --dark: #2F4F4F;
+      --text: #333;
+      --leaf-1: #4CAF50;
+      --leaf-2: #8BC34A;
+      --leaf-3: #CDDC39;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #f0f8ff);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* تأثير أوراق الخلفية العائمة - معدّل للعمل */
+    .leaf {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      opacity: 0.4;
+      z-index: -1;
+      animation: float 15s linear infinite;
+      background-size: cover;
+    }
+    
+    .leaf-1 {
+      background: linear-gradient(135deg, var(--leaf-1), var(--leaf-2));
+      border-radius: 50% 50% 50% 0;
+    }
+    
+    .leaf-2 {
+      background: linear-gradient(135deg, var(--leaf-2), var(--leaf-3));
+      border-radius: 50% 0 50% 50%;
+    }
+    
+    .leaf-3 {
+      background: linear-gradient(135deg, var(--leaf-3), var(--leaf-1));
+      border-radius: 50% 50% 0 50%;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(10vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+      }
+    }
+    
+    .header-container {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+    
+    .header-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+      background-size: cover;
+    }
+    
+    .marquee-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 0;
+      border-radius: 8px;
+      margin: 10px auto;
+      max-width: 90%;
+      overflow: hidden;
+    }
+    
+    marquee {
+      color: #FFD700;
+      font-family: 'Arial', sans-serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 8px 0;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: linear-gradient(to right, var(--dark), #1a3a3a);
+      padding: 15px 10px;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin: 0 auto 20px;
+      max-width: 95%;
+      z-index: 10;
+      position: relative;
+    }
+    
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      margin: 5px;
+      border-radius: 30px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar a:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .navbar a i {
+      font-size: 18px;
+    }
+    
+    .banner-section {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 25px;
+      margin: 25px auto;
+      max-width: 95%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .banner-title {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .banner-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent), var(--primary));
+      border-radius: 4px;
+    }
+    
+    .gallery-3d {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      perspective: 1200px;
+    }
+    
+    .gallery-item {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: leafFloat 8s infinite ease-in-out;
+    }
+    
+    /* تأثير تحريك الصور كأوراق الرياح */
+    @keyframes leafFloat {
+      0%, 100% {
+        transform: 
+          translateY(0) 
+          rotate(0deg) 
+          rotateX(0deg) 
+          rotateY(0deg);
+      }
+      25% {
+        transform: 
+          translateY(-10px) 
+          rotate(2deg) 
+          rotateX(3deg) 
+          rotateY(2deg);
+      }
+      50% {
+        transform: 
+          translateY(0) 
+          rotate(-1deg) 
+          rotateX(-2deg) 
+          rotateY(-1deg);
+      }
+      75% {
+        transform: 
+          translateY(-7px) 
+          rotate(-2deg) 
+          rotateX(2deg) 
+          rotateY(-3deg);
+      }
+    }
+    
+    .gallery-item:hover {
+      transform: 
+        rotateY(15deg) 
+        rotateX(10deg) 
+        translateY(-10px) 
+        scale(1.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      animation: none;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.15);
+    }
+    
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(70, 130, 180, 0.3), rgba(32, 178, 170, 0.3));
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+    
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      z-index: 2;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .ai-chat-section {
+      background: linear-gradient(135deg, var(--light), #e0f7fa);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: transform 0.4s ease;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .ai-chat-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .ai-chat-section h2 {
+      color: var(--dark);
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .ai-chat-section p {
+      color: #444;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .ai-button {
+      display: inline-block;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: white;
+      padding: 14px 35px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+      border: none;
+      cursor: pointer;
+    }
+    
+    .ai-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(70, 130, 180, 0.6);
+      background: linear-gradient(to right, var(--accent), var(--primary));
+    }
+    
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .section-card:hover {
+      transform: translateY(-10px) rotateY(5deg) rotateX(5deg);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-icon {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    
+    .card-content {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-content h3 {
+      color: var(--dark);
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+    
+    .section-link {
+      display: block;
+      margin-top: auto;
+      text-align: center;
+      background: var(--accent);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .section-link:hover {
+      background: var(--primary);
+      transform: scale(1.05);
+    }
+    
+    .floating-section {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    #floating-btn {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    #floating-btn:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    #request-text {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-weight: bold;
+      color: var(--dark);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    #form-popup {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      width: 300px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      display: none;
+      transform-origin: bottom left;
+      animation: popIn 0.4s ease;
+      position: absolute;
+      bottom: 80px;
+      left: 0;
+      z-index: 1001;
+    }
+    
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    #form-popup h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    #form-popup h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+    
+    #form-popup input,
+    #form-popup textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    #form-popup input:focus,
+    #form-popup textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(32, 178, 170, 0.2);
+      outline: none;
+    }
+    
+    #form-popup button {
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      width: 100%;
+    }
+    
+    #form-popup button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #888;
+      transition: color 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      color: var(--primary);
+    }
+    
+    .owner-footer {
+      background: linear-gradient(to right, var(--dark), #1a3a3a);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 1rem;
+      border-top: 3px solid var(--accent);
+      position: relative;
+      z-index: 10;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .navbar a {
+        width: 90%;
+        justify-content: center;
+      }
+      
+      .sections-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 10px;
+      }
+      
+      .gallery-3d {
+        gap: 10px;
+      }
+      
+      .gallery-item {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .floating-section {
+        left: 15px;
+        bottom: 15px;
+      }
+      
+      #form-popup {
+        width: 280px;
+        left: -20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <div class="marquee-container">
+      <marquee direction="right"> <font face="Andalus" size="1" 
+        <h1>أهلا وسهلا بكم في استراحة شبكتي لمشاهدة احدث المسلسلات والأفلام الاجنبية والعربية والتركية والهندية والبرامج الدينية وبرامج الأطفال والألعاب المجانية بدون تنزيلها على الهواتف</h1>
+      </marquee>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+    <a href="arabic-series.html"><i class="fas fa-tv"></i> مسلسلات عربية</a>
+    <a href="arabic-movies.html"><i class="fas fa-film"></i> أفلام عربية</a>
+    <a href="kids.html"><i class="fas fa-child"></i> الأطفال</a>
+    <a href="religion.html"><i class="fas fa-film"></i> وثائقيات</a>
+    <a href="anime.html"><i class="fas fa-dragon"></i> الأنمي</a>
+    <a href="games.html"><i class="fas fa-gamepad"></i> العاب الذكاء</a>
+    <a href="episode_external_with_download.html"><i class="fas fa-satellite"></i> بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <div class="banner-section">
+    <h2 class="banner-title">استراحة شبكتي</h2>
+    <div class="gallery-3d">
+        <div class="gallery-item"><img src="background.png" alt="صورة 1"></div>
+  <div class="gallery-item"><img src="Hhjh.png" alt="صورة 2"></div>
+  <div class="gallery-item"><img src="N.png" alt="صورة 3"></div>
+  <div class="gallery-item"><img src="Nn.png" alt="صورة 4"></div>
+  <div class="gallery-item"><img src="Nnn.png" alt="صورة 5"></div>
+  <div class="gallery-item"><img src="Nnnn.png" alt="صورة 6"></div>
+  <div class="gallery-item"><img src="hibah.png" alt="صورة 7"></div>
+  <div class="gallery-item"><img src="M.png" alt="صورة 8"></div>
+  <div class="gallery-item"><img src="Nnnnn.png" alt="صورة 9"></div>
+  <div class="gallery-item"><img src="Mmmm.png" alt="صورة 10"></div>
+  <div class="gallery-item"><img src="Mmmmm.png" alt="صورة 11"></div>
+  <div class="gallery-item"><img src="Mm.png" alt="صورة 12"></div>
+  <div class="gallery-item"><img src="Mmmmmmm.png" alt="صورة 13"></div>
+  <div class="gallery-item"><img src="Mmmmmmmm.png" alt="صورة 14"></div>
+  <div class="gallery-item"><img src="Mmm.png" alt="صورة 15"></div>
+  <div class="gallery-item"><img src="fr.png" alt="صورة 16"></div>
+  <div class="gallery-item"><img src="Karate Kid Legends.png" alt="صورة 17"></div>
+  <div class="gallery-item"><img src="he.png" alt="صورة 18"></div>
+  <div class="gallery-item"><img src="Pr.png" alt="صورة 19"></div>
+  <div class="gallery-item"><img src="casa.png" alt="صورة 20"></div>
+      <div class="gallery-item">
+        <img src="https://i0.wp.com/cha7n.com/wp-content/uploads/2024/01/shahid-vip-cards.webp" alt="صورة استراحة ناصر">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=500" alt="صورة مسلسلات">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500" alt="صورة أفلام">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=500" alt="صورة أطفال">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1560963689-b5682b6440f8?q=80&w=500" alt="صورة دينية">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500" alt="صورة أنمي">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=500" alt="صورة ألعاب">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1497636577773-f1231844b336?q=80&w=500" alt="صورة كتب">
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500" alt="صورة بث مباشر">
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-chat-section">
+    <h2><i class="fas fa-robot"></i> دردش مع الذكاء الاصطناعي</h2>
+    <p>ابحث عن أي شيء تريده أو اطلب المساعدة من الذكاء الاصطناعي مباشرة. يمكنك الحصول على توصيات للأفلام والمسلسلات، معلومات عن البرامج، وأجوبة لأسئلتك.</p>
+    <a href="ai-chat.html" class="ai-button">ابدأ الدردشة الآن</a>
+  </div>
+
+  <div class="sections-grid">
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-tv"></i></div>
+      <div class="card-content">
+        <h3>مسلسلات عربية</h3>
+        <a href="arabic-series.html" class="section-link">تصفح المسلسلات</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-globe-asia"></i></div>
+      <div class="card-content">
+        <h3>مسلسلات اسبانية</h3>
+        <a href="indian-series.html" class="section-link">تصفح المسلسلات</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-mosque"></i></div>
+      <div class="card-content">
+        <h3>مسلسلات تركية</h3>
+        <a href="turkish-series.html" class="section-link">تصفح المسلسلات</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-globe-americas"></i></div>
+      <div class="card-content">
+        <h3>مسلسلات أجنبية</h3>
+        <a href="foreign-series.html" class="section-link">تصفح المسلسلات</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-film"></i></div>
+      <div class="card-content">
+        <h3>أفلام عربية</h3>
+        <a href="arabic-movies.html" class="section-link">تصفح الأفلام</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-video"></i></div>
+      <div class="card-content">
+        <h3>أفلام أجنبية</h3>
+        <a href="foreign-movies.html" class="section-link">تصفح الأفلام</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-archway"></i></div>
+      <div class="card-content">
+        <h3>أفلام هندية</h3>
+        <a href="indian-movies.html" class="section-link">تصفح الأفلام</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-child"></i></div>
+      <div class="card-content">
+        <h3>برامج الأطفال</h3>
+        <a href="kids.html" class="section-link">تصفح البرامج</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-pray"></i></div>
+      <div class="card-content">
+        <h3>وثائقيات </h3>
+        <a href="religion.html" class="section-link">تصفح البرامج</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-dragon"></i></div>
+      <div class="card-content">
+        <h3>أنمي</h3>
+        <a href="anime.html" class="section-link">تصفح الأنمي</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-book"></i></div>
+      <div class="card-content">
+        <h3>مكتبة الاستراحة</h3>
+        <a href="library.html" class="section-link">تصفح الكتب</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-book-open"></i></div>
+      <div class="card-content">
+        <h3>الكتب المدرسية</h3>
+        <a href="manhg.html" class="section-link">تصفح وتحميل</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+      <div class="card-content">
+        <h3>ألعاب كلاسيكية</h3>
+        <a href="https://playhop.com/ar" target="_blank" class="section-link">العب الآن</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-chess"></i></div>
+      <div class="card-content">
+        <h3>ألعاب الذكاء</h3>
+        <a href="games.html" class="section-link">العب الآن</a>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-icon"><i class="fas fa-satellite-dish"></i></div>
+      <div class="card-content">
+        <h3>البث المباشر</h3>
+        <a href="episode_external_with_download.html" class="section-link">مشاهدة القنوات</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-section">
+    <div id="floating-btn">📝</div>
+    <div id="request-text">اطلب إضافة مسلسل أو فيلم</div>
+    <div id="form-popup">
+      <button class="close-btn">×</button>
+      <h3>أرسل طلبك الآن</h3>
+      <form action="https://formsubmit.co/4e2da64737e57dacc8d831b2afa3fbc4" method="POST">
+        <input type="text" name="name" placeholder="اسمك (اختياري)">
+        <input type="email" name="email" placeholder="بريدك الإلكتروني (اختياري)">
+        <textarea name="message" placeholder="اكتب اسم المسلسل أو الفيلم المطلوب" required rows="4"></textarea>
+        <button type="submit">إرسال الطلب</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="owner-footer">
+    <p>جميع الحقوق محفوظة © ناصر صالح الراعي للتواصل وطلب الإضافة (735957348)</p>
+  </div>
+
+  <script>
+    // توليد أوراق خلفية عشوائية - معدّلة للعمل بشكل صحيح
+    function createLeaves() {
+      const leafCount = 20;
+      
+      for (let i = 0; i < leafCount; i++) {
+        const leaf = document.createElement('div');
+        leaf.classList.add('leaf');
+        
+        // اختيار شكل عشوائي للورقة
+        const leafType = Math.floor(Math.random() * 3) + 1;
+        leaf.classList.add(`leaf-${leafType}`);
+        
+        // عشوائية في الحجم والموضع والسرعة
+        const size = Math.random() * 20 + 15;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 15;
+        
+        leaf.style.width = `${size}px`;
+        leaf.style.height = `${size}px`;
+        leaf.style.left = `${left}%`;
+        leaf.style.animationDelay = `${delay}s`;
+        leaf.style.animationDuration = `${duration}s`;
+        
+        document.body.appendChild(leaf);
+      }
+    }
+    
+    // تأثير تحريك الصور كأوراق الرياح
+    function applyLeafEffect() {
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      
+      galleryItems.forEach((item, index) => {
+        // إضافة تأخير مختلف لكل صورة
+        const delay = index * 0.5;
+        item.style.animationDelay = `${delay}s`;
+      });
+    }
+    
+    // وظيفة إظهار/إخفاء نموذج الطلب
+    function toggleForm() {
+      const form = document.getElementById('form-popup');
+      const text = document.getElementById('request-text');
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+      text.style.display = text.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    // تهيئة الصفحة عند التحميل
+    document.addEventListener('DOMContentLoaded', function() {
+      createLeaves();
+      applyLeafEffect();
+      
+      // تهيئة الأحداث
+      document.getElementById('floating-btn').addEventListener('click', toggleForm);
+      document.querySelector('.close-btn').addEventListener('click', toggleForm);
+      
+      // تأثير التحويم على الصور
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      galleryItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const randomRotate = Math.random() * 10 - 5;
+          item.style.transform = `rotateY(${randomRotate}deg) rotateX(${randomRotate}deg) translateY(-10px) scale(1.05)`;
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          item.style.transform = '';
+        });
+      });
+      
+      // إظهار البطاقات بتتابع
+      const cards = document.querySelectorAll('.section-card');
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+    });
+  </script>
+</body>
+</html>

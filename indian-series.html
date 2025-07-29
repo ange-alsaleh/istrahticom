@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>مسلسلات اسبانية</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .video-player-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #B0E0E6;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .video-player-title {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 450px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player iframe, 
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .close-player-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4757;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .close-player-btn:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+    
+    .no-video-selected {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #aaa;
+      font-size: 20px;
+      background: #222;
+      flex-direction: column;
+    }
+    
+    .no-video-selected i {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .series-block {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .series-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .series-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .series-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .series-title {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .series-title:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .series-title::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .series-title.active::after {
+      transform: rotate(180deg);
+    }
+
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none;
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .episode-list::-webkit-scrollbar-track {
+      background: #e1e8ff;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb {
+      background: #4facfe;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb:hover {
+      background: #00f2fe;
+    }
+
+    .episode-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .episode-list li:hover {
+      background: #e1edff;
+    }
+
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3498db, #1a5ca3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1a5ca3, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-download {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(to right, #27ae60, #2ecc71);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #B0E0E6;
+      border-radius: 15px;
+      color: #003366;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-player {
+        height: 300px;
+      }
+      
+      .series-title {
+        font-size: 18px;
+        padding: 12px 15px;
+      }
+      
+      .episode-name {
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .video-player {
+        height: 250px;
+      }
+      
+      .series-title {
+        font-size: 16px;
+      }
+      
+      .episode-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <h1>📺 مسلسلات اسبانية</h1>
+
+<!-- مشغل الفيديو -->
+  <div class="video-player-container">
+    <div class="video-player-title" id="player-title">اختر حلقة لمشاهدتها</div>
+    <button class="close-player-btn" onclick="closeVideoPlayer()">✕</button>
+    <div class="video-player" id="video-player">
+      <div class="no-video-selected">
+        <i>▶️</i>
+        <div>لم يتم اختيار أي فيديو للعرض</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="series-list">
+
+    <!-- مسلسل La Casa De Papel الموسم الاول   -->
+    <div class="series-block">
+      <img src="casa.png" alt="صورة مسلسل La Casa De Papel" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('casa')">مسلسل الموسم الاول La Casa De   Papel ▼</div>
+      <ul id="casa" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/sq51zwc7mio3?s1.egybestvid.com/i/03/00000/5147hah5lh7p', 'La Casa De Papel - الحلقة 1')">مشاهدة</a>
+           
+            <a href="https://egybestvid.com/sq51zwc7mio3.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/seyob754xobw?s1.egybestvid.com/i/03/00000/h9s3g2a50o0j', 'La Casa De Papel - الحلقة 2')">مشاهدة</a>
+            <a href="https://egybestvid.com/seyob754xobw.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/3jauuno11ppi?s1.egybestvid.com/i/03/00000/k4fsfnn34ja8', 'La Casa De Papel - الحلقة 3')">مشاهدة</a>
+            <a href="https://egybestvid.com/3jauuno11ppi.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/70uxduzo2pen?s1.egybestvid.com/i/03/00000/yc468707lpe7', 'La Casa De Papel - الحلقة 4')">مشاهدة</a>
+            <a href="https://egybestvid.com/70uxduzo2pen.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/paziokro2bc1?s1.egybestvid.com/i/03/00000/x0o1ta0f7cl1', 'La Casa De Papel - الحلقة 5')">مشاهدة</a>
+            <a href="https://egybestvid.com/paziokro2bc1.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/op3jco97x9c0?s1.egybestvid.com/i/03/00000/pt0wblzhrs5w', 'La Casa De Papel - الحلقة 6')">مشاهدة</a>
+            <a href="https://egybestvid.com/op3jco97x9c0.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/kii925ji3gj3?s1.egybestvid.com/i/03/00000/s2b4ltp693ex', 'La Casa De Papel - الحلقة 7')">مشاهدة</a>
+            <a href="https://egybestvid.com/kii925ji3gj3.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/wdyzg1hrs11e?s1.egybestvid.com/i/03/00000/mnr2owqlase2', 'La Casa De Papel - الحلقة 8')">مشاهدة</a>
+            <a href="https://egybestvid.com/wdyzg1hrs11e.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/pl9ikmvcna8b?s1.egybestvid.com/i/03/00000/bcl2tjlx8hqt', 'La Casa De Papel - الحلقة 9')">مشاهدة</a>
+            <a href="https://egybestvid.com/pl9ikmvcna8b.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/81i04elmzp7x?s1.egybestvid.com/i/03/00000/ny35p8kb82yv', 'La Casa De Papel - الحلقة 10')">مشاهدة</a>
+            <a href="https://egybestvid.com/81i04elmzp7x.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/pzlufwlo5gii?s1.egybestvid.com/i/03/00000/p3541uyi04s4', 'La Casa De Papel - الحلقة 11')">مشاهدة</a>
+            <a href="https://egybestvid.com/pzlufwlo5gii.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/jk8aejmljhdv?s1.egybestvid.com/i/03/00000/d2n6fg7fiu5z', 'La Casa De Papel - الحلقة 12')">مشاهدة</a>
+            <a href="https://egybestvid.com/jk8aejmljhdv.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13 والاخيرة</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/upayce1cdql7?s1.egybestvid.com/i/03/00000/j1mngs3vcbuq', 'La Casa De Papel - الحلقة 13')">مشاهدة</a>
+            <a href="https://egybestvid.com/upayce1cdql7.html"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+       </ul>
+  </div>
+  </div>
+
+  <div class="series-list">
+
+    <!-- مسلسل La Casa De Papel الموسم الثاني   -->
+    <div class="series-block">
+      <img src="casa2.png" alt="صورة مسلسل La Casa De Papel2" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('casa2')"> مسلسل الموسم الثاني La Casa De   Papel ▼</div>
+      <ul id="casa2" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/gqdonq7tdn8l?s1.egybestvid.com/i/03/00000/7vnicp9gpw3n', 'La Casa De Papel2 - الحلقة 1')">مشاهدة</a>
+            <a href="https://egybestvid.com/gqdonq7tdn8l.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/r5qwx0tmgxtu?s1.egybestvid.com/i/03/00000/smyqww8x8mog', 'La Casa De Papel2 - الحلقة 2')">مشاهدة</a>
+            <a href="https://egybestvid.com/r5qwx0tmgxtu.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/clsprf09eus9?s1.egybestvid.com/i/03/00000/6w7qc4fwhl94', 'La Casa De Papel2 - الحلقة 3')">مشاهدة</a>
+            <a href="https://egybestvid.com/clsprf09eus9.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/vil0xxhoxj9j?s1.egybestvid.com/i/03/00000/trgq1i6hxp11', 'La Casa De Papel2 - الحلقة 4')">مشاهدة</a>
+            <a href="https://egybestvid.com/vil0xxhoxj9j.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/xxy4lcthvwky?s1.egybestvid.com/i/03/00000/3o7d0b1z0aim', 'La Casa De Papel2 - الحلقة 5')">مشاهدة</a>
+            <a href="https://egybestvid.com/xxy4lcthvwky.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/an9u0r18mwnt?s1.egybestvid.com/i/03/00000/ehvut91o7zyp', 'La Casa De Papel2 - الحلقة 6')">مشاهدة</a>
+            <a href="https://egybestvid.com/an9u0r18mwnt.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/y4998yqd3yp5?s1.egybestvid.com/i/03/00000/83xbc798or82', 'La Casa De Papel2 - الحلقة 7')">مشاهدة</a>
+            <a href="https://egybestvid.com/y4998yqd3yp5.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/b567kokgo1hv?s1.egybestvid.com/i/03/00000/tjsxajhmlwvg', 'La Casa De Papel2 - الحلقة 8')">مشاهدة</a>
+            <a href="https://egybestvid.com/b567kokgo1hv.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9 والاخيرة</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://egybestvid.com/e/81y3zki4bmw5?s1.egybestvid.com/i/03/00000/1uc7gwmrovld', 'La Casa De Papel2 - الحلقة 9')">مشاهدة</a>
+            <a href="https://egybestvid.com/81y3zki4bmw5.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  
+  <div class="footer">
+    © 2025 استراحة ناصر | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      const title = el.previousElementSibling;
+      
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        title.classList.remove('active');
+      } else {
+        el.style.display = 'block';
+        title.classList.add('active');
+      }
+    }
+    
+    function playVideo(url, title, type = 'iframe') {
+      const player = document.getElementById('video-player');
+      const titleElement = document.getElementById('player-title');
+      
+      // تحديث عنوان المشغل
+      titleElement.textContent = title;
+      
+      // إعداد مشغل الفيديو
+      player.innerHTML = '';
+      
+      if (type === 'video') {
+        // فيديو مباشر (MP4)
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', url);
+        videoElement.setAttribute('controls', true);
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        player.appendChild(videoElement);
+      } else {
+        // تضمين من مواقع خارجية
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url);
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', true);
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        player.appendChild(iframe);
+      }
+      
+      // التمرير إلى مشغل الفيديو
+      document.querySelector('.video-player-container').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    function closeVideoPlayer() {
+      const player = document.getElementById('video-player');
+      player.innerHTML = '<div class="no-video-selected"><i>▶️</i><div>لم يتم اختيار أي فيديو للعرض</div></div>';
+      document.getElementById('player-title').textContent = 'اختر حلقة لمشاهدتها';
+    }
+  </script>
+
+</body>
+</html>
+
+  
+

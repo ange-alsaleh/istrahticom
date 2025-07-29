@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>مسلسلات أجنبية</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+    }
+
+    .series-list {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: right;
+    }
+
+    .series-block {
+      background-color: #DDEEFF;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: background-color 0.3s;
+    }
+
+    .series-block:hover {
+      background-color: #B0D0FF;
+    }
+
+    .series-header {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .series-poster {
+      width: 80px;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-left: 15px;
+    }
+
+    .series-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #003366;
+    }
+
+    .episode-list {
+      display: none;
+      padding: 10px 20px 20px 20px;
+      background-color: #F0F8FF;
+      border-top: 1px solid #ccc;
+    }
+
+    .episode-list li {
+      list-style: none;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #C0D8FF;
+      padding-bottom: 6px;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+    }
+
+    .btn {
+      background-color: #4682B4;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #5a9bd5;
+    }
+
+    .btn-download {
+      background-color: #32CD32;
+    }
+
+    .btn-download:hover {
+      background-color: #45d845;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="foreign-series.html">🌍 مسلسلات أجنبية</a>
+  </div>
+
+  <h1>🌍 مسلسلات أجنبية</h1>
+
+  <div class="series-list">
+
+    <!-- مسلسل 1 -->
+    <div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('prisonBreak')">
+        <img src="Pr.png" alt="Prison Break" class="series-poster">
+        <div class="series-title">مسلسل Prison Break الموسم الاول</div>
+      </div>
+      <ul id="prisonBreak" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1n5MZlFDUjJ0fspCy3bRrnlL8fbN5zSws/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1n5MZlFDUjJ0fspCy3bRrnlL8fbN5zSws/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1SxJ529Cn-ZcuNlRXWJ1jI-QGsXmAQx-i/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1SxJ529Cn-ZcuNlRXWJ1jI-QGsXmAQx-i/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1zlMNzDtn2WwKEwCz7PXF_YyvxbNkGXUQ/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1zlMNzDtn2WwKEwCz7PXF_YyvxbNkGXUQ/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1GP0lmfO1Yf93_4bi5rbdv4Kfd5ARG4Yr/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1GP0lmfO1Yf93_4bi5rbdv4Kfd5ARG4Yr/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1Pk524hRJdybKGJEeqEhYBGeNSR-l-pGP/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1Pk524hRJdybKGJEeqEhYBGeNSR-l-pGP/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1_DIH-aBfFlGDwVgxPdwG0pMyzjo5CUI6/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1_DIH-aBfFlGDwVgxPdwG0pMyzjo5CUI6/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1PJ5X7J6wXbKyTvrYG-TzXoUMUQLbO6Mr/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1PJ5X7J6wXbKyTvrYG-TzXoUMUQLbO6Mr/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="https://drive.google.com/file/d/14UgA5PXqmzCNy_4FF1lFzxEkZwRkHcgy/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/14UgA5PXqmzCNy_4FF1lFzxEkZwRkHcgy/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1w9xutXdPZEckLuCnjZSu7RyunFt10I-9/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1w9xutXdPZEckLuCnjZSu7RyunFt10I-9/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1UaRJqwGSiXzGGY2VrJVkGV_BxhZI6BkK/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1UaRJqwGSiXzGGY2VrJVkGV_BxhZI6BkK/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="https://drive.google.com/file/d/150ORGs_bLQ2uWDgdewS5uvbr5K-qUDtH/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/150ORGs_bLQ2uWDgdewS5uvbr5K-qUDtH/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1s6HyXiYSloU-vx_ELYpCtnULKucu0I04/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1s6HyXiYSloU-vx_ELYpCtnULKucu0I04/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1gTA7OWRpHsfHN-s76pIPJCv4K__BW_iZ/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1gTA7OWRpHsfHN-s76pIPJCv4K__BW_iZ/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1YniHly6-cW1YkfVFEKn7lehZlwghk75h/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1YniHly6-cW1YkfVFEKn7lehZlwghk75h/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1iXWWaODu_ToDXObDp6-JBCxmjmsvOIy_/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1iXWWaODu_ToDXObDp6-JBCxmjmsvOIy_/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1J8SXIcsKz1Pijh2M8JyTG-n8PrnyFEyM/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1J8SXIcsKz1Pijh2M8JyTG-n8PrnyFEyM/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1AeIjJWBCSNRs2kyXd0b0KL7UVok12BzP/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1AeIjJWBCSNRs2kyXd0b0KL7UVok12BzP/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1GYm3-kXnapi6h6bd_T-RXsmDnzab0c3O/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1GYm3-kXnapi6h6bd_T-RXsmDnzab0c3O/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="https://drive.google.com/file/d/19JwXQH8tpU7sKNLa0CWGXswVod-r0vt1/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/19JwXQH8tpU7sKNLa0CWGXswVod-r0vt1/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1sr-8d0nJ_-k4Z4opjXdrfJsuD8DQf0lo/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1sr-8d0nJ_-k4Z4opjXdrfJsuD8DQf0lo/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="https://drive.google.com/file/d/19NTpe9PQqLUO41djiP_Og81yxYxzwJdu/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/19NTpe9PQqLUO41djiP_Og81yxYxzwJdu/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22 والاخيرة</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1-XovsEtyt_TaV7ZBxsK4ueFT2ifD4O_d/view" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://drive.google.com/file/d/1-XovsEtyt_TaV7ZBxsK4ueFT2ifD4O_d/view" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- مسلسل 2 -->
+    <div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('friends')">
+        <img src="fr.png" alt="Friends" class="series-poster">
+        <div class="series-title">مسلسل peaky blinders الموسم الاول</div>
+      </div>
+      <ul id="friends" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/1.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/2.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/3.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/4.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/5.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12/6.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/z4FUbyx07M2kDw/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20..%20insta%20%40filmcity12" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+<div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('manifest')">
+        <img src="ma.png" alt="manifest" class="series-poster">
+        <div class="series-title">  مسلسل ‏ manifest الموسم الاول</div>
+      </div>
+      <ul id="manifest" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E01.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E02.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E03.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E04.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E05.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E06.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E07.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E08.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E09.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E10.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E11.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E12.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E13.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E14.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E15.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA/E16.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/GKlKvkakymTSNA" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('GAME OF THRONES')">
+        <img src="gm.png" alt="GAME OF THRONES" class="series-poster">
+        <div class="series-title">   ‏ مسلسل  GAME OF THRONES  الموسم الاول</div>
+      </div>
+      <ul id="GAME OF THRONES" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E01.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E02.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E03.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E04.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E05.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E06.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E07.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E08.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E09.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/E10.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/ul_z4IMbvhr7IA/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+       </div>
+       <div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('VIKINGS')">
+        <img src="vk.png" alt="VIKINGS" class="series-poster">
+        <div class="series-title">   ‏ مسلسل VIKINGS الموسم الاول</div>
+      </div>
+      <ul id="VIKINGS" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E01.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E02.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E03.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E04.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E05.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E06.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E07.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E08.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84/E09.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/snN37oImiQqaiQ/%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%85%20%D8%A7%D9%84%D8%A3%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+            </div>
+<div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('THE BOYS')">
+        <img src="bo.png" alt="THE BOYS" class="series-poster">
+        <div class="series-title">   ‏ مسلسل THE BOYS الموسم الاول</div>
+      </div>
+      <ul id="THE BOYS" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E01.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E02.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E03.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E04.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E05.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E06.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E07.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w/E08.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/seZqdP3uc39V4w" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+            </div>
+<div class="series-block">
+      <div class="series-header" onclick="toggleEpisodes('MR . Robot')">
+        <img src="ro.png" alt="MR . Robot" class="series-poster">
+        <div class="series-title">   ‏ مسلسل MR . Robot الموسم الاول</div>
+      </div>
+      <ul id="MR . Robot" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E01.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E02.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E03.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E04.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E05.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E06.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E07.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E08.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E09.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+ </li>
+        <li>
+          <span class="episode-name">الحلقة 10 والاخيرة</span>
+          <div>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84/E10.mp4" target="_blank" class="btn">مشاهدة</a>
+            <a href="https://disk.yandex.com/d/fVKqMQKGbPelwA/%D8%A7%D9%84%D8%A7%D9%88%D9%84" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+      
+      
+
+  <script>
+    function toggleEpisodes(id) {
+      const list = document.getElementById(id);
+      list.style.display = list.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+  
+
+</body>
+</html>

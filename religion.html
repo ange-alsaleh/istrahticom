@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>أفلام وثائقية</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .video-player-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #B0E0E6;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .video-player-title {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 450px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player iframe, 
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .close-player-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4757;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .close-player-btn:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+    
+    .no-video-selected {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #aaa;
+      font-size: 20px;
+      background: #222;
+      flex-direction: column;
+    }
+    
+    .no-video-selected i {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .series-block {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .series-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .series-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .series-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .series-title {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .series-title:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .series-title::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .series-title.active::after {
+      transform: rotate(180deg);
+    }
+
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none;
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .episode-list::-webkit-scrollbar-track {
+      background: #e1e8ff;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb {
+      background: #4facfe;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb:hover {
+      background: #00f2fe;
+    }
+
+    .episode-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .episode-list li:hover {
+      background: #e1edff;
+    }
+
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3498db, #1a5ca3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1a5ca3, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-download {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(to right, #27ae60, #2ecc71);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #B0E0E6;
+      border-radius: 15px;
+      color: #003366;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-player {
+        height: 300px;
+      }
+      
+      .series-title {
+        font-size: 18px;
+        padding: 12px 15px;
+      }
+      
+      .episode-name {
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .video-player {
+        height: 250px;
+      }
+      
+      .series-title {
+        font-size: 16px;
+      }
+      
+      .episode-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html">وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <h1>📽 أفلام وثائقية</h1>
+  
+  <!-- مشغل الفيديو -->
+  <div class="video-player-container">
+    <div class="video-player-title" id="player-title">اختر حلقة لمشاهدتها</div>
+    <button class="close-player-btn" onclick="closeVideoPlayer()">✕</button>
+    <div class="video-player" id="video-player">
+      <div class="no-video-selected">
+        <i>▶️</i>
+        <div>لم يتم اختيار أي فيديو للعرض</div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="series-list">
+
+    <!-- كوارث الطيران -->
+    <div class="series-block">
+      <img src="kwarth.png" alt="صورة كوارث الطيران" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('kwarth')">تحقيقات الكوارث الجوية▼</div>
+      <ul id="kwarth" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/xrZz_aQ2hOc?si=5L5bAkrl1yR8BYib', 'الكوارث الجوية - الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/0gsVLJPBAow?si=ShA4CugEBLFv0rmm', 'الكوارث الجوية- الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/hM1Bk4cEFmg?si=lXK_B89xzf-Orsay', 'الكوارث الجوية - الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/KVZQNNY5ixI?si=ZyGzQegzrkX-hBJ6', 'الكوارث الجوية- الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+ <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/ISc4_m7OjFU?si=ZFikDiOszOAJPLu_', 'الكوارث الجوية - الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/7ZsgnLP3Nyc?si=lG_tCtTZUm3BGz4R', 'الكوارث الجوية- الحلقة 6')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+ <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/yeQhDWW2rws?si=21Phq0bdohR4KFU8', 'الكوارث الجوية - الحلقة 7')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/l8lE0C_kTlY?si=0rjJ53hbRXJrl7Oq', 'الكوارث الجوية- الحلقة 8')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+ <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/ZeJM_OwsaQQ?si=8F9oKSGdDTATLgTU', 'الكوارث الجوية - الحلقة 9')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/SKsMOxdfvJE?si=R5fS5bkHty-ymFId', 'الكوارث الجوية- الحلقة 10')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+</ul>
+
+
+
+
+
+</div>
+  <div class="series-list">
+
+    <!-- ابكاليبس الحرب 1 -->
+    <div class="series-block">
+      <img src="abka.png" alt="صورة ابكاليبس الحرب1" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('abka')">ابكاليبس الحرب العالمية الأولى ▼</div>
+      <ul id="abka" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/Wrbf2rJyat0?si=DdO2FexbOZBC9OS2', 'ابكاليبس الحرب الأولى- الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/-NpmnD2Enow?si=sBCd8Mc-ZQG-mKZc', 'ابكاليبس الحرب الأولى- الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/oEZmtI_q6Xo?si=K2hXy0ds4wOlwodB', 'ابكاليبس الحرب الأولى- الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/A5sLukaBLAE?si=MYGSfvYaNjo68rQ0', 'ابكاليبس الحرب الأولى- الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/GQbhRmkiTew?si=TbSMfe_b-N4WQQJ6', 'ابكاليبس الحرب الأولى- الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </ul>
+
+
+
+
+
+
+</div>
+</div>
+  <div class="series-list">
+
+    <!-- ابكاليبس الحرب 2 -->
+    <div class="series-block">
+      <img src="abka2.png" alt="صورة ابكاليبس الحرب2" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('abka2')">ابكاليبس الحرب العالمية الثانية ▼</div>
+      <ul id="abka2" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/pbXmk8DG4pI?si=jDDC0rNWPlGQ3xhL', 'ابكاليبس الحرب الثانية الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/O2QoRbqFFpQ?si=CBW8lJXyVLPhFzXk', 'ابكاليبس الحرب الثانية الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/WGY-tDYS-es?si=LaD2bzrUy_TD7qQ1', 'ابكاليبس الحرب الثانية الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/KX2pffbylqE?si=FS-Gny_Hsmz55yXO', 'ابكاليبس الحرب الثانية الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/v_SMIyJy0pc?si=EixRHzXEWtEoXYZt', 'ابكاليبس الحرب الثانية الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/xJslRnyF5mI?si=B0GB7y9HaH9o5-vB', 'ابكاليبس الحرب الثانية الحلقة 6')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </ul>
+
+
+
+
+
+
+</div>
+<div class="series-list">
+
+    <!-- اسرار المصانع العملاقة  -->
+    <div class="series-block">
+      <img src="asrar.png" alt="صورة اسرار المصانع العملاقة" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('asrar')">اسرار المصانع  العملاقة ▼</div>
+      <ul id="asrar" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/hnQSl0SoPJU?si=_EnhExpXKAyWuE9Y', 'اسرار المصانع  العملاقة الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/4uchKeDoM0Q?si=JZr0WOqRLhfEc0L5', 'اسرار المصانع  العملاقة الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/uPymoNWOA1o?si=KnOOySOFt5XUAG0B', 'اسرار المصانع  العملاقة الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/lzHrPCOOSzY?si=W6PUuHjyzA8ubhdM', 'اسرار المصانع  العملاقة الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/_HI_e2oW4ao?si=n4TejdXhS15yrOMs', 'اسرار المصانع  العملاقة الحلقة5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/E8nchBdxE7o?si=iXvD9iNeQCwRBVa4', 'اسرار المصانع  العملاقة الحلقة 6')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/CPPp2NYubI8?si=9IhkMCh-82tgr4hd', 'اسرار المصانع  العملاقة الحلقة 7')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </ul>
+
+
+
+
+
+
+</div>
+</div>
+  <div class="series-list">
+
+    <!-- عوالم قاع البحار-->
+    <div class="series-block">
+      <img src="awalm.png" alt="صورة عوالم قاع البحار " class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('awalm')">عوالم قاع البحار ▼</div>
+      <ul id="awalm" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/Z42ZWUvnoyU?si=HS0tpm4ppcrBbIvb', 'عوالم قاع البحار- الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/G-j7zsZFi_c?si=vY3OYr4HPZcTDAOX', 'عوالم قاع البحار- الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/CcoGlGm0LoM?si=mTFa_7LOB4GJPLVD', 'عوالم قاع البحار- الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/OuAPdsfsV7Y?si=KygFI4xYEYWSDlsa', 'عوالم قاع البحار- الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/ddXy4fdn-pg?si=G0M1uKPoqZz-8zI8', 'عوالم قاع البحار- الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         
+  </ul>
+  </div>
+  </div>
+  <div class="series-list">
+
+    <!-- آلات عملاقة-->
+    <div class="series-block">
+      <img src="alat.png" alt="صورة آلات عملاقة" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('alat')">آلات عملاقة ▼</div>
+      <ul id="alat" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/3kf_49RwGY8?si=yj_PHYenpUcnl5n1', 'آلات عملاقة الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed//DyfQk-MfYwk?si=fxLWw8NGyI3Mjr0E', 'آلات عملاقة الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/yWdQ40HXd18?si=_PQTSBGx6tYwgHUj', 'آلات عملاقة الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/jW5-zay5CFo?si=5bl4zmxfgwBrGPa3', 'آلات عملاقة الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/wIWgOWI47Pk?si=wuhvWKmlE_5md89O', 'آلات عملاقة الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         
+  </ul>
+  </div>
+  <div class="footer">
+    © 2025 استراحة ناصر | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      const title = el.previousElementSibling;
+      
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        title.classList.remove('active');
+      } else {
+        el.style.display = 'block';
+        title.classList.add('active');
+      }
+    }
+    
+    function playVideo(url, title, type = 'iframe') {
+      const player = document.getElementById('video-player');
+      const titleElement = document.getElementById('player-title');
+      
+      // تحديث عنوان المشغل
+      titleElement.textContent = title;
+      
+      // إعداد مشغل الفيديو
+      player.innerHTML = '';
+      
+      if (type === 'video') {
+        // فيديو مباشر (MP4)
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', url);
+        videoElement.setAttribute('controls', true);
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        player.appendChild(videoElement);
+      } else {
+        // تضمين من مواقع خارجية
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url);
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', true);
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        player.appendChild(iframe);
+      }
+      
+      // التمرير إلى مشغل الفيديو
+      document.querySelector('.video-player-container').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    function closeVideoPlayer() {
+      const player = document.getElementById('video-player');
+      player.innerHTML = '<div class="no-video-selected"><i>▶️</i><div>لم يتم اختيار أي فيديو للعرض</div></div>';
+      document.getElementById('player-title').textContent = 'اختر حلقة لمشاهدتها';
+    }
+  </script>
+
+</body>
+</html>

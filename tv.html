@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قنوات مباشرة</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0a0f1b;
+      color: white;
+      font-family: 'Tajawal', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.light-mode {
+      background-color: #f0f0f0;
+      color: #111;
+    }
+    header {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .moon {
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    .player {
+      background: #1c2230;
+      margin: 1rem;
+      padding: 1rem;
+      border-radius: 15px;
+      position: relative;
+      text-align: center;
+    }
+    body.light-mode .player {
+      background: #fff;
+    }
+    .player .live {
+      background: rgba(255, 0, 0, 0.7);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      position: absolute;
+      top: var(--live-top, 10px);
+      right: var(--live-right, 10px);
+      left: var(--live-left, auto);
+      bottom: var(--live-bottom, auto);
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    video {
+      width: 100%;
+      max-height: 220px;
+      border-radius: 10px;
+      background: black;
+    }
+    .fullscreen-btn {
+      margin-top: 0.5rem;
+      background: #0d6efd;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .categories {
+      margin: 1rem;
+    }
+    .categories button {
+      background: #1c2230;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    body.light-mode .categories button {
+      background: #ddd;
+      color: #111;
+    }
+    .channels {
+      margin: 2rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .channel {
+      background: #1c2230;
+      padding: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .channel img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    body.light-mode .channel {
+      background: #fff;
+      color: #111;
+    }
+    .navbar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #1c2230;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+    }
+    body.light-mode .navbar {
+      background: #ddd;
+      color: #111;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    body.light-mode .navbar a {
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+
+<section class="player">
+  <div class="live" style="--live-top: 20px; --live-right: 20px;">مباشر</div>
+  <video id="video" controls autoplay></video>
+</section>
+
+<section class="categories">
+  <button onclick="filterChannels('all')">جميع القنوات</button>
+  <button onclick="filterChannels('news')">قنوات إخبارية</button>
+  <button onclick="filterChannels('sport')">قنوات رياضية</button>
+  <button onclick="filterChannels('kids')">قنوات اطفال</button>
+  <button onclick="filterChannels('monoat')">قنوات منوعات</button>
+  <button onclick="filterChannels('islam')">قنوات اسلامية</button>
+</section>
+
+<section class="channels" id="channels">
+  <div class="channel" data-category="news" data-src="https://live-hls-apps-aja-v3-fa.getaj.net/AJA/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2024/11/picsart_24-11-23_02-59-21-7254502805147498804649.png" alt="الجزيرة">
+    الجزيرة الاخبارية
+  </div>
+  <div class="channel" data-category="news" data-src="https://live-hls-web-ajm.getaj.net/AJM/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984288293657266075852379588.jpg" alt="4">
+الجزيرة مباشر
+  </div>
+  <div class="channel" data-category="news" data-src="https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_16-00-52-761.jpg" alt="العربية">
+العربية الاخبارية
+  </div>
+  <div class="channel" data-category="news" data-src="https://shls-hadath-prod-dub.shahid.net/out/v1/0e1a306399c346faac4226aa0858f99b/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-25-15-601.jpg" alt="الحدث">
+العربية الحدث
+  </div>
+  <div class="channel" data-category="news" data-src="https://stream.skynewsarabia.com/ott/ott.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-27-31-365.jpg" alt="سكاي عربية">
+سكاي نيوز عربية
+  </div>
+  <div class="channel" data-category="news" data-src="https://svs.itworkscdn.net/bloomberarlive/bloomberg.smil/playlist_dvr.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-31-35-110.jpg" alt="الشرق">
+الشرق للاخبار
+  </div>
+  <div class="channel" data-category="news" data-src="https://live.france24.com/hls/live/2037222/F24_AR_HI_HLS/master_5000.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-45-10-629.jpg" alt="فرنسا">
+فرنسا 24
+  </div>
+  <div class="channel" data-category="news" data-src="https://vs-hls-pushb-ww.live.cf.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:bbc_arabic_tv/pc_hd_abr_v2.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-43-34-409.jpg" alt="بي بي سي عربية">
+بي بي سي عربية
+  </div>
+  <div class="channel" data-category="news" data-src="https://mdnlv.cdn.octivid.com/almdn/smil:mpegts.stream.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/01/picsart_23-01-27_17-34-32-115.jpg" alt="الميادين">
+الميادين
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://svs.itworkscdn.net/syriatvlive/syriatv.smil/playlist_dvr.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/defimage3969569012490519141.png" alt="سوريا">
+تلفزيون سوريا
+</div>
+  <div class="channel" data-category="monoat" data-src="https://live.kwikmotion.com/syriatv02live/syriatv02.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/images2395502146540845444.jpeg" alt="الثانية">
+سوريا الثانية
+</div>
+  <div class="channel" data-category="monoat" data-src="https://p-ltv.akamaized.net/ltv/ltv.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984281293318575537335798155.jpg" alt="LTV">
+LTV SYRIA
+</div>
+  <div class="channel" data-category="news" data-src="https://live.alarabiya.net/alarabiapublish/aswaaq.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984282298921269910408956068.jpg" alt="العربية الاقتصادية">
+العربية الاقتصادية
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://d1j4r34gq3qw9y.cloudfront.net/out/v1/96804f3a14864641a21c25e8ca9afb74/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad98457053676586798219.jpg" alt="العربية برامج">
+العربية برامج
+</div>
+  <div class="channel" data-category="news" data-src="https://bcovlive-a.akamaihd.net/20c3ca22be3c4f03b30afbf3c92cfd14/ap-south-1/6313884884001/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad9843112237656482295601.jpg" alt="المشهد">
+المشهد
+</div>
+<div class="channel" data-category="news" data-src="https://iko-live.akamaized.net/AlyuamTV/master.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984289295645141147891945658.jpg" alt="4">
+اليوم
+  </div>
+  <div class="channel" data-category="kids" data-src="https://mbc-3-usa-ak.akamaized.net/out/v1/8bbfec9446d84c9ea0dfa34edede6db9/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/03/picsart_23-03-03_13-01-45-799.jpg" alt="mbc 3">
+MBC 3
+  </div>
+  <div class="channel" data-category="kids" data-src="https://streams.spacetoon.com/live/stchannel/smil:livesmil.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/03/picsart_23-03-03_13-07-34-468.jpg" alt="سبيستون">
+سبيستون
+  </div>
+  <div class="channel" data-category="kids" data-src="https://playlist.fasttvcdn.com/pl/ptllxjd03j6g9oxxjdfapg/roya-kids-originals/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984283291678699179921130472.jpg" alt="رؤيا كيدز">
+رؤيا كيدز
+  </div>
+  <div class="channel" data-category="kids" data-src="https://moonbug-rokuus.amagi.tv/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/picsart_25-04-30_20-55-11-7637293465476293926950.png" alt="moonbug">
+moonbug
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://playlist.fasttvcdn.com/pl/toa2uuhhygheuly7xtuqrg/roya-comedy/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984281297063586588031513654.jpg" alt="رؤيا كوميدي">
+رؤيا كوميدي
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://playlist.fasttvcdn.com/pl/a2le4pbpa6rpzv147haf4w/drama/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984281297063586588031513654.jpg" alt="دراما">
+رؤيا دراما
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://playlist.fasttvcdn.com/pl/toa2uuhhygheuly7xtuqrg/roya-kitchen/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984281297063586588031513654.jpg" alt="كيتشن">
+رؤيا كيتشن
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://royatv-live.daioncdn.net/royatv/royatv.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984282296240009843345610680.jpg" alt="رؤيا">
+رؤيا
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://live.kwikmotion.com/futurelive/ftv.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/images281294480125629386148665.jpg" alt="المستقبل">
+المستقبل
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://hms.pfs.gdn/v1/broadcast/mtv/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984284296982084874550376107.jpg" alt="mtv">
+mtv
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://hms.pfs.gdn/v1/broadcast/one/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984285296938689554179198073.jpg" alt="one">
+one tv
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://cdn.catiacast.video/abr/ed8f807e2548db4507d2a6f4ba0c4a06/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/04/d8aad986d8b2d98ad984283293585477158857075091.jpg" alt="تل">
+TL لبنان
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://weyyak-live.akamaized.net/weyyak_zee_alwan/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/03/d8aad986d8b2d98ad984282329.jpeg" alt="الوان">
+زي الوان
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://weyyak-live.akamaized.net/weyyak_zee_aflam/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/03/d8aad986d8b2d98ad984281929.png" alt="زي افلام">
+زي افلام
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://d3o3cim6uzorb4.cloudfront.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/03/d8aad986d8b2d98ad984282029.png" alt="mbc">
+MBC 1
+  </div>
+  <div class="channel" data-category="monoat" data-src="https://shls-masr-prod-dub.shahid.net/out/v1/c08681f81775496ab4afa2bac7ae7638/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2023/06/picsart_23-06-16_20-55-14-716.png" alt="4">
+MBC 4
+  </div>
+  <div class="channel" data-category="islam" data-src="https://al-ekhbaria-prod-dub.shahid.net/out/v1/9885cab0a3ec4008b53bae57a27ca76b/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984286297893229794263470870.jpg" alt="القران">
+القران الكريم
+  </div>
+  <div class="channel" data-category="islam" data-src="https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984284295763149471188527240.jpg" alt="السنة">
+السنة النبوية
+  </div>
+  <div class="channel" data-category="islam" data-src="https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad98428529284562670066395869.jpg" alt="اقرا">
+اقراء
+  </div>
+  <div class="channel" data-category="islam" data-src="https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad98428529284562670066395869.jpg" alt="4">
+اقراء قران
+  </div>
+  <div class="channel" data-category="islam" data-src="https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984286296704368287364149598.jpg" alt="مكة">
+مكة
+  </div>
+  <div class="channel" data-category="islam" data-src="https://dmiffthftl.cdn.mangomolo.com/noordubaitv/smil:noordubaitv.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984287294559215033069411420.jpg" alt="4">
+نور دبي
+  </div>
+  <div class="channel" data-category="islam" data-src="https://kwtethta.cdn.mangomolo.com/eth/smil:eth.stream.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984287291560428172345528644.jpg" alt="4">
+الكويت اثراء
+  </div>
+<div class="channel" data-category="monoat" data-src="https://live-hls-web-ajd.getaj.net/AJD/index.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984288297402425690659400800.jpg" alt="4">
+الجزيرة الوثائقية
+  </div>
+  <div class="channel" data-category="sport" data-src="https://dmitwlvvll.cdn.mgmlcdn.com/dubaisportshd/smil:dubaisportshd.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984281029901900757029355522.jpg" alt="4">
+دبي الرياضية 2
+  </div>
+  <div class="channel" data-category="sport" data-src="https://dmitwlvvll.cdn.mgmlcdn.com/dubaisportshd5/smil:dubaisportshd5.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad984281029901900757029355522.jpg" alt="4">
+دبي الرياضية 3
+  </div>
+  <div class="channel" data-category="sport" data-src="https://dmisdracta.cdn.mgmlcdn.com/events/smil:events.stream.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad9842811294758081103149484478.jpg" alt="4">
+دبي راسنغ
+  </div>
+  <div class="channel" data-category="sport" data-src="https://dmithrvllta.cdn.mgmlcdn.com/dubairacing/smil:dubairacing.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad9842811294758081103149484478.jpg" alt="4">
+دبي راسنغ 2
+  </div>
+  <div class="channel" data-category="sport" data-src="https://dmithrvllta.cdn.mgmlcdn.com/dubaimubasher/smil:dubaimubasher.smil/chunklist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad9842811294758081103149484478.jpg" alt="4">
+دبي راسنغ 3
+  </div>
+  <div class="channel" data-category="sport" data-src="https://svs.itworkscdn.net/smc4sportslive/smc4.smil/playlist.m3u8">
+    <img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/d8aad986d8b2d98ad9842812291006983732572860675.jpg" alt="4">
+الشارقة الرياضية
+  </div>
+</section>
+
+<img src="https://rashednet1.wordpress.com/wp-content/uploads/2025/05/picsart_25-05-02_02-12-35-1041748636504217509775.png" style="width:100%"></a>
+
+<!-- wp:spacer -->
+<div style="height:45px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->
+<nav class="navbar">
+  <a href="index.html">العودة الى الصفحة الرئيسية 📊</a>
+
+<script>
+function toggleMode() {
+  document.body.classList.toggle('light-mode');
+}
+
+function filterChannels(category) {
+  const channels = document.querySelectorAll('.channel');
+  channels.forEach(channel => {
+    if (category === 'all' || channel.dataset.category === category) {
+      channel.style.display = 'flex';
+    } else {
+      channel.style.display = 'none';
+    }
+  });
+}
+
+const video = document.getElementById('video');
+let hls;
+
+function playChannel(src) {
+  if (hls) {
+    hls.destroy();
+  }
+  if (Hls.isSupported()) {
+    hls = new Hls();
+    hls.loadSource(src);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,function() {
+      video.muted = false;
+      video.play();
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = src;
+    video.addEventListener('loadedmetadata',function() {
+      video.muted = false;
+      video.play();
+    });
+  }
+}
+
+const channelElements = document.querySelectorAll('.channel');
+channelElements.forEach(channel => {
+  channel.addEventListener('click', () => {
+    const src = channel.getAttribute('data-src');
+    playChannel(src);
+
+    const liveLabel = document.querySelector('.live');
+    if (liveLabel) {
+      liveLabel.style.display = 'inline-block';
+      clearTimeout(window.liveTimeout);
+      window.liveTimeout = setTimeout(() => {
+        liveLabel.style.display = 'none';
+      }, 60000);
+    }
+
+    // التمرير إلى المشغل
+    document.querySelector('.player').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// تشغيل القناة الافتراضية
+playChannel('https://live-hls-apps-aja-v3-fa.getaj.net/AJA/index.m3u8');
+
+// إخفاء كلمة مباشر بعد 30 ثانية
+window.liveTimeout = setTimeout(() => {
+  const liveLabel = document.querySelector('.live');
+  if (liveLabel) {
+    liveLabel.style.display = 'none';
+  }
+}, 30000);
+</script>
+
+</body>
+</html>
+
+</div>
+  <script src="assets\js\vendor\jquery-1.11.3.min.js"></script>
+  <script src='assets\js\vendor\bootstrap.min.js'></script>
+  <script src='assets\js\vendor\plugin.js'></script>
+  <script src='assets\js\variable.js'></script>
+  <script src='assets\js\map.js'></script>
+  <script src='assets\js\main.js'></script>
+  <script src='assets\js\demo.js'></script>
+  <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+  </script>  
+</body>
+</html>

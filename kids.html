@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>برامج أطفال</title>
+   <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+    }
+   
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: right;
+    }
+    .series-title {
+      background-color: #DDEEFF;
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: #003366;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    .series-title:hover {
+      background-color: #B0D0FF;
+    }
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none; 
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+    }
+    .episode-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+    }
+    .btn {
+      background-color: #4682B4;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #5a9bd5;
+    }
+    .btn-download {
+      background-color: #32CD32;
+    }
+    .btn-download:hover {
+      background-color: #45d845;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+  <h1>برامج أطفال</h1>
+  <div class="series-list">
+
+    
+    <div class="series-block">
+      <img src="Kk.png" alt="صورة فيديوهات تعليمية" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('hibah')">فيديوهات تعليمية ▼</div>
+      <ul id="hibah" class="episode-list">
+        <li>
+          <span class="episode-name">تعلم الارقام باالعربية </span>
+          <div>
+            <a href="https://youtube.com/embed/fIMOkV63X5I?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم الحروف العربية </span>
+          <div>
+            <a href="https://youtube.com/embed/kSlmmLvMqWA?feature=shared" target" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم الارقام باالعربية </span>
+          <div>
+            <a href="https://youtube.com/embed/-o5O_VLYvwU?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم الالوان باالعربية </span>
+          <div>
+            <a href="https://youtube.com/embed/9Pv4MgycFi4?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم أركان الإسلام </span>
+          <div>
+            <a href="https://youtube.com/embed/vC43yxyjIEE?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم الوضوء  </span>
+          <div>
+            <a href="https://youtube.com/embed/y3Hd5srW_ak?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم الصلاة  </span>
+          <div>
+            <a href="https://youtube.com/embed/edL3W38ODd4?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم آداب الطعام  </span>
+          <div>
+            <a href="https://youtube.com/embed/TXH-qwmsWm0?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم  الحروف الانجليزية للأطفال</span>
+          <div>
+            <a href="https://youtube.com/embed/5PKXLilDGuE?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم  الارقام الانجليزية للأطفال</span>
+          <div>
+            <a href="https://youtube.com/embed/6QJ0NWz512g?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تعلم  الالوان الانجليزية للأطفال</span>
+          <div>
+            <a href="https://youtube.com/embed/1b8EmT12X_g?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+   
+    <div class="series-block">
+      <img src="Kkk.png" alt="صورة فيديوهات ترفيهية " class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ghrabeeb')">فيديوهات ترفيهية ▼</div>
+      <ul id="ghrabeeb" class="episode-list">
+        <li>
+          <span class="episode-name">قصص في عالم الأبطال الخارقين</span>
+          <div>
+            <a href="https://youtube.com/embed/ZYLRR89Y3pM?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">في المزرعة -اصوات الحيوانات</span>
+          <div>
+            <a href="https://youtube.com/embed/iW1gtfI4Ufk?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">تيلتابيز</span>
+          <div>
+            <a href="https://youtube.com/embed/-umDQwj8rlE?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي موسى علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/kiupVafniFQ?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي يونس علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/-fvcKFKt1qQ?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة سيدنا آدم علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/hC-hfDGgMVg?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي نوح علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/zAXRZpDyr8Q?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي إبراهيم علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/J-3H_lP8qHQ?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي يوسف علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/yrKJuWGEiVU?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">قصة النبي سليمان علية السلام</span>
+          <div>
+            <a href="https://youtube.com/embed/60RbMZEbFGU?feature=shared" target="_blank" class="btn">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    
+    <div class="series-block">
+      <img src="k.png" alt="صورة العاب وتسلية " class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ekhteyar')">العاب وتسلية ▼</div>
+      <ul id="ekhteyar" class="episode-list">
+        <li>
+          <span class="episode-name">لعبة توم وجيري </span>
+          <div>
+            <a href="https://www.ttt4.com/kids-games/tom-and-jerry-run-jerry.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة حرب الطائرات </span>
+          <div>
+            <a href="https://www.ttt4.com/war-games/fly-the-plane.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة الدراجات النارية </span>
+          <div>
+            <a href="https://www.ttt4.com/bike-games/moto-x3m-3.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة الحلزون </span>
+          <div>
+            <a href="https://www.ttt4.com/adventure-games/snail-bob.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة أكس أو(X-O) </span>
+          <div>
+            <a href="https://www.ttt4.com/puzzle-games/tic-tac-toe.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة كرة القدم </span>
+          <div>
+            <a href="https://www.ttt4.com/sport-games/football-masters.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة تحميل الشاحنات </span>
+          <div>
+            <a href="https://www.ttt4.com/car-games/truck-loader-5.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة أونو </span>
+          <div>
+            <a href="https://www.ttt4.com/thinking-games/uno.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة قنص الفقاعات </span>
+          <div>
+            <a href="https://www.ttt4.com/puzzle-games/tingly-bubble-shooter.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">لعبة معركة السفن </span>
+          <div>
+            <a href="https://www.ttt4.com/thinking-games/battleship-war.html" target="_blank" class="btn">العب</a>
+            
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>

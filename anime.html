@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>مسلسلات أنمي</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .video-player-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #B0E0E6;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .video-player-title {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 450px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player iframe, 
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .close-player-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4757;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .close-player-btn:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+    
+    .no-video-selected {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #aaa;
+      font-size: 20px;
+      background: #222;
+      flex-direction: column;
+    }
+    
+    .no-video-selected i {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .series-block {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .series-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .series-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .series-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .series-title {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .series-title:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .series-title::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .series-title.active::after {
+      transform: rotate(180deg);
+    }
+
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none;
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .episode-list::-webkit-scrollbar-track {
+      background: #e1e8ff;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb {
+      background: #4facfe;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb:hover {
+      background: #00f2fe;
+    }
+
+    .episode-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .episode-list li:hover {
+      background: #e1edff;
+    }
+
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3498db, #1a5ca3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1a5ca3, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-download {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(to right, #27ae60, #2ecc71);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #B0E0E6;
+      border-radius: 15px;
+      color: #003366;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-player {
+        height: 300px;
+      }
+      
+      .series-title {
+        font-size: 18px;
+        padding: 12px 15px;
+      }
+      
+      .episode-name {
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .video-player {
+        height: 250px;
+      }
+      
+      .series-title {
+        font-size: 16px;
+      }
+      
+      .episode-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <h1>📺 مسلسلات أنمي</h1>
+  
+  <!-- مشغل الفيديو -->
+  <div class="video-player-container">
+    <div class="video-player-title" id="player-title">اختر حلقة لمشاهدتها</div>
+    <button class="close-player-btn" onclick="closeVideoPlayer()">✕</button>
+    <div class="video-player" id="video-player">
+      <div class="no-video-selected">
+        <i>▶️</i>
+        <div>لم يتم اختيار أي فيديو للعرض</div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="series-list">
+
+    <!-- مسلسل ناروتو -->
+    <div class="series-block">
+      <img src="naruto.png" alt="صورة مسلسل ناروتو" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('naruto')">مسلسل ناروتو ▼</div>
+      <ul id="naruto" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 77</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840053&share=1', 'naruto - الحلقة 77')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 78</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840061&share=1', 'naruto - الحلقة 78')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 79</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840063&share=1', 'naruto - الحلقة 79')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 80</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840065&share=1', 'naruto - الحلقة 80')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 81</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840066&share=1', 'naruto - الحلقة 81')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 82</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840072&share=1', 'naruto - الحلقة 82')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+<li>
+          <span class="episode-name">الحلقة 83</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840074&share=1', 'naruto - الحلقة 83')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 84</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840078&share=1', 'naruto - الحلقة 84')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 85</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840080&share=1', 'naruto - الحلقة 85')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 86</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840094&share=1', 'naruto - الحلقة 86')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 87</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840099&share=1', 'naruto - الحلقة 87')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 88</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840103&share=1', 'naruto - الحلقة 88')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+<li>
+          <span class="episode-name">الحلقة 89</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840104&share=1', 'naruto - الحلقة 89')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 90</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840105&share=1', 'naruto - الحلقة 90')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 91</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840106&share=1', 'naruto - الحلقة 91')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 92</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840109&share=1', 'naruto - الحلقة 92')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 93</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840111&share=1', 'naruto - الحلقة 93')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 94</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5840114&share=1', 'naruto - الحلقة 94')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+</div>
+  <div class="series-list">
+
+    <!-- مسلسل ون بيس -->
+    <div class="series-block">
+      <img src="onepese.png" alt="صورة مسلسل ون بيس" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('onepese')">مسلسل ون بيس ▼</div>
+      <ul id="onepese" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 101</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659655&share=1', 'onepese - الحلقة 101')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 102</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659658&share=1', 'onepese - الحلقة 102')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 103</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659659&share=1', 'onepese - الحلقة 103')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 104</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659661&share=1', 'onepese - الحلقة 104')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 105</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659665&share=1', 'onepese - الحلقة 105')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 106</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659675&share=1', 'onepese - الحلقة 106')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+<li>
+          <span class="episode-name">الحلقة 107</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659685&share=1', 'onepese - الحلقة 107')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 108</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659691&share=1', 'onepese - الحلقة 108')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 109</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659693&share=1', 'onepese - الحلقة 109')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 110</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659695&share=1', 'onepese - الحلقة 110')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 111</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659699&share=1', 'onepese - الحلقة 111')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 112</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659701&share=1', 'onepese - الحلقة 112')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+<li>
+          <span class="episode-name">الحلقة 113</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659706&share=1', 'onepese - الحلقة 113')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 114</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659712&share=1', 'onepese - الحلقة 114')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+<li>
+          <span class="episode-name">الحلقة 115</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659718&share=1', 'onepese - الحلقة 115')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 116</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659724&share=1', 'onepese - الحلقة 116')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+<li>
+          <span class="episode-name">الحلقة 117</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659726&share=1', 'onepese - الحلقة 117')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 118</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('http://video.sibnet.ru/shell.php?videoid=5659731&share=1', 'onepese - الحلقة 118')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+
+</div>
+  
+  <div class="footer">
+    © 2025 استراحة ناصر | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      const title = el.previousElementSibling;
+      
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        title.classList.remove('active');
+      } else {
+        el.style.display = 'block';
+        title.classList.add('active');
+      }
+    }
+    
+    function playVideo(url, title, type = 'iframe') {
+      const player = document.getElementById('video-player');
+      const titleElement = document.getElementById('player-title');
+      
+      // تحديث عنوان المشغل
+      titleElement.textContent = title;
+      
+      // إعداد مشغل الفيديو
+      player.innerHTML = '';
+      
+      if (type === 'video') {
+        // فيديو مباشر (MP4)
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', url);
+        videoElement.setAttribute('controls', true);
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        player.appendChild(videoElement);
+      } else {
+        // تضمين من مواقع خارجية
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url);
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', true);
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        player.appendChild(iframe);
+      }
+      
+      // التمرير إلى مشغل الفيديو
+      document.querySelector('.video-player-container').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    function closeVideoPlayer() {
+      const player = document.getElementById('video-player');
+      player.innerHTML = '<div class="no-video-selected"><i>▶️</i><div>لم يتم اختيار أي فيديو للعرض</div></div>';
+      document.getElementById('player-title').textContent = 'اختر حلقة لمشاهدتها';
+    }
+  </script>
+
+</body>
+</html>

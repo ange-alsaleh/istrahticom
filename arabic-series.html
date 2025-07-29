@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>مسلسلات عربية</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .video-player-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #B0E0E6;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .video-player-title {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 450px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player iframe, 
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .close-player-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4757;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .close-player-btn:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+    
+    .no-video-selected {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #aaa;
+      font-size: 20px;
+      background: #222;
+      flex-direction: column;
+    }
+    
+    .no-video-selected i {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .series-block {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .series-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .series-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .series-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .series-title {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .series-title:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .series-title::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .series-title.active::after {
+      transform: rotate(180deg);
+    }
+
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none;
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .episode-list::-webkit-scrollbar-track {
+      background: #e1e8ff;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb {
+      background: #4facfe;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb:hover {
+      background: #00f2fe;
+    }
+
+    .episode-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .episode-list li:hover {
+      background: #e1edff;
+    }
+
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3498db, #1a5ca3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1a5ca3, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-download {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(to right, #27ae60, #2ecc71);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #B0E0E6;
+      border-radius: 15px;
+      color: #003366;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-player {
+        height: 300px;
+      }
+      
+      .series-title {
+        font-size: 18px;
+        padding: 12px 15px;
+      }
+      
+      .episode-name {
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .video-player {
+        height: 250px;
+      }
+      
+      .series-title {
+        font-size: 16px;
+      }
+      
+      .episode-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <h1>📺 مسلسلات عربية</h1>
+  
+  <!-- مشغل الفيديو -->
+  <div class="video-player-container">
+    <div class="video-player-title" id="player-title">اختر حلقة لمشاهدتها</div>
+    <button class="close-player-btn" onclick="closeVideoPlayer()">✕</button>
+    <div class="video-player" id="video-player">
+      <div class="no-video-selected">
+        <i>▶️</i>
+        <div>لم يتم اختيار أي فيديو للعرض</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="series-list">
+
+    <!-- مسلسل الهيبة -->
+    <div class="series-block">
+      <img src="hibah.png" alt="صورة مسلسل الهيبة" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('hibah')">مسلسل الهيبة ▼</div>
+      <ul id="hibah" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0he', 'الهيبة - الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hc', 'الهيبة - الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hg', 'الهيبة - الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hi', 'الهيبة - الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hm', 'الهيبة - الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hk', 'الهيبة - الحلقة 6')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9bc0hs', 'الهيبة - الحلقة 7')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqo', 'الهيبة - الحلقة 8')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqq', 'الهيبة - الحلقة 9')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqs', 'الهيبة - الحلقة 10')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqu', 'الهيبة - الحلقة 11')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqw', 'الهيبة - الحلقة 12')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cr6', 'الهيبة - الحلقة 13')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cr4', 'الهيبة - الحلقة 14')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cr0', 'الهيبة - الحلقة 15')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x9c0cqy', 'الهيبة - الحلقة 16')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239953&hash=a1a3e5e7939a24e4', 'الهيبة - الحلقة 17')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239954&hash=f0e3a575333deb9a', 'الهيبة - الحلقة 18')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239955&hash=b6ffcf005dd7726f', 'الهيبة - الحلقة 19')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239956&hash=344895d514ed873e', 'الهيبة - الحلقة 20')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239957&hash=1741f4d54f139ba2', 'الهيبة - الحلقة 21')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239958&hash=61365e2b143f68a3', 'الهيبة - الحلقة 22')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 23</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239959&hash=8092773342fda0f6', 'الهيبة - الحلقة 23')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 24</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239960&hash=1c5e9f310a3959f4', 'الهيبة - الحلقة 24')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 25</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239961&hash=a29cb806f43fcb0d', 'الهيبة - الحلقة 25')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 26</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239962&hash=68352333ffcf3c8d', 'الهيبة - الحلقة 26')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 27</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239963&hash=1d10de612e3a0186', 'الهيبة - الحلقة 27')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 28</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239964&hash=34df790555475a7f', 'الهيبة - الحلقة 28')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 29</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239965&hash=a4ef11c9cb3d1c98', 'الهيبة - الحلقة 29')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 30 والاخيرة</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848077464&id=456239966&hash=c5f968b85583d0a7', 'الهيبة - الحلقة 30')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>         
+    </div>
+
+    <!-- مسلسل آسر -->
+    <div class="series-block">
+      <img src="As.png" alt="صورة آسر" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('asr')">مسلسل آسر ▼</div>
+      <ul id="asr" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/-jILCAfyXLfdJQY9zbwjx0jOygNjsDJ0DEnct4z-K7eF2wIlOHX1HmG6xJ9q_tlrsk9q4-F__tCaDkoXnh6QwEN-6JZx9r2il4wXComb7igmPLdu/Aser_Ep_1.mp4', 'آسر - الحلقة 1')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-1/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/XmfxGTXG83PbMSG0Zv19BpYI4QXd6m94LywTAMaytvXCySKgs_5dJrhISudCMsZpNGsElZsDNPrQ-zbY_n_BtDOl4TP0dDG6EdULR7foOXki4LQz/Aser_Ep_2.mp4', 'آسر - الحلقة 2')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-2/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/Ele1pf2Ad4c0luoCfJ4hr-iCIXADeVYwZWKCKtdS8wz5O7hd7oo5RJg7aGorAHhgbaEVhw_vIO9WJsYHEHtl20_FV_eZPfKfXI_QTkHlTQFFvt93/Aser_Ep_3.mp4', 'آسر - الحلقة 3')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-3/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/zb1aJfsdBCloM_ycWsZ-ql2ZXLlinhuyy_1Dp9_UBO395WCDDrD5bHrrIXJNQ2uTn6joaWmoGRjj4SK6Dd8OLavy0RuR4--675u2eKahQRfDO4NE/Aser_Ep_4.mp4', 'آسر - الحلقة 4')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-4/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/2mlzfrnSOJfM0-gqoKYNlhtaJSlUMohJT5hM811idMEgXcqIKm6D2Wq2SSQtyd3ob6tax0gPLi_kVXJEEJUG1bHAhCl2ecl57v8DmJUnCP07-Say/Aser_Ep_5.mp4', 'آسر - الحلقة 5')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-5/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/6evPxXX0VAcIEPsrqHb2NJtmKjau4WuQEjBa-ZFqGyPuLhUYGxhMyKlvwTII4bssTEr1c3sLYuws5EuW4ZAfSeTgX_m5YJ-D_Pquo0YQbProsE_I/Aser_Ep_6.mp4', 'آسر - الحلقة 6')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-6/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/wqvHtj6orcM49J3Kmj9ZNANbRa5ZUDI8AuloAr3ZvldkkfnQKI8sr8UIJD4RBl5cDLZAbES9GuoWhfDwB0qDD0R8w04zOADNm0hcvMHm9phgZEKN/Aser_Ep_7.mp4', 'آسر - الحلقة 7')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-7/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/q7m-RHgTMsaQPUO1FIJrJUo-SaQ1KaQqEdVD0swwwChwma2vaOdCzGDfy7oyNLSFe04aitsqh6gv32o4cuZqk095rvPBpE_vB22mqAG19scVd6zh/Aser_Ep_8.mp4', 'آسر - الحلقة 8')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-8/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/fpdQawJJ3gj4oIFUV7GWAsBn76wVbW_goZjZI82I3rY5uzRR0WREx6PEeFqkwP6EDjbQpjLzoJ4m_V9PDqc8hvut6iUTOoQZiZJLokNgKa_BBjWi/Aser_Ep_9.mp4', 'آسر - الحلقة 9')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-9/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/3KSc_Md8dbRyqk3KYQGZBetufD4afRTBlEOArU0KXZYniqh6HomZ2WIhLVePxno11H6Y5epE1ObNCo7MwKAR82K_nBpSyfs9Cls72xzMLqJq-lLw/Aser_Ep_10.mp4', 'آسر - الحلقة 10')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-10/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/mlTo7boiwSoI2CL4xISbY2cWOO0nvuB-nvy6t5vSHfnHxtE4FATP8uE9CUQsC9_TFhWItJoyJWA7OiwNtSRgnlvLSx61OnhbxBqE6gU6ty_fgwHQ/Aser_Ep_11.mp4', 'آسر - الحلقة 11')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-11/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/zKLRqzTTJkwRckn9FF86gMWcgZkelO0ruuoZpVusj_K3n0EKTBGKimTwmsqQ9LbDS3Cs9u0Y6alvqKZIN7EQoRJqQxyBDo46HDsU-o61Dreoxam4/Aser_Ep_12.mp4', 'آسر - الحلقة 12')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-12/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/yXmrsgqteyu2Qz4eNNgpvULEqzulzOfYOjlHuHoXdxQq0TrBb6QGKoP4-8IQXIfWuiMV74-7gAp8I8fmvSeHwdEQHutTnkwV1cVb3byBWt8ebj5C/Aser_Ep_13.mp4', 'آسر - الحلقة 13')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-13/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/VyvoNBXqkF_IDjSxEPv2wylGBbA5eQYLT9MVaPlh3jOjM3OGbICfWx_rwT0EDkPMkMnALueOeIlNOkSFI60O8cBLgJ3oGEhXKZILOf8gx-uPuaYT/Aser_Ep_14.mp4', 'آسر - الحلقة 14')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-14/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/D3dSZraaMu4l6DlTA40gKLvZtYR-062Q-8aLm1xGP0UfPGv2fhl1dSO5VbT_Eri9ACDw1bFz-IKCwK_Ou0vMa3L5FsxmEswCTonqVwwry0I4Bp2V/Aser_Ep_15.mp4', 'آسر - الحلقة 15')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-15/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/0ZKGvKwbd-7l2F3uMHrQNM1CGOxjJBSBUegH97QHR1LTGWE9lxcycCQEbEAMTJnqzwM00KKIqugPaJ4csgTgv8R8-tPMBAR4X1a1nq6TZ25Kv3Ep/Aser_Ep_16.mp4', 'آسر - الحلقة 16')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-16/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/4JqUI5vxTW80qlVtqtLKUzSk36vm6FPyGF8Co4dioj9SHFBPIouUOE4S2DT35S34p5iL1EJF7Q3Xk92xsNmthAwr9GB5CeDwHClqmm7JeahhS_ZN/Aser_Ep_17.mp4', 'آسر - الحلقة 17')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-17/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/AM8fj-xhhcmF905x3zbmH5y8-fh7iiiKAVIvhcXEeCnLgSlT71EPVmNUT__dpGE8nVMu7sAYA4Qucsbbjnw4a-nRNyU4hjvkU2bRhCuX8dQDICNK/Aser_Ep_18.mp4', 'آسر - الحلقة 18')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-18/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/9Ci8RYhBQQahbSEeLN3YNSm089cxjiJoMCpSOjqDBBT2qDPaZT8gF-2a9McP9TPFEbHWIJuomYVviPsW8wSt5R7ZYp1WGDhWTjQnDtiH-2wMbD_v/Aser_Ep_19.mp4', 'آسر - الحلقة 19')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-19/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/BCRvAQh8aXaokmkkf7fFQGaG2dpeoI5-5aH7u0tKEeTytgIZn0xr6rwYpNRtOk4pJEm-1shoRJMqGfFR8s_jI_4dhX25kuYxh0-0SD95vTY7iWiR/Aser_Ep_20.mp4', 'آسر - الحلقة 20')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-20/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/J33Js8RMO3gT1XB9UVsuyclNmO0IG7-idby3jNQ9KjMALtLd48DnpUJbOO_w2ZOFqeMNUz0eidpPBQGalt4Kgd6ck0ta3Py4XdK__qy2byEsd0CO/Aser_Ep_21.mp4', 'آسر - الحلقة 21')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-21/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/IZ-plQZJa-xcXH9DZVlBE-9WOEQD-TslBFo7JMKZtZ1Qyvu2njXa6Bhf3bfXs9jEoMogGw9JeQfcBhfTxKWR_vVl0FkIxaVlIzaL_NugtnJCN3Bu/Aser_Ep_22.mp4', 'آسر - الحلقة 22')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-22/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 23</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/8zGSuf8YBRGWpEG_uwAHLvipkN9kaR3HF_FRge_qkAW26VyfWMLMVQ8j8t2mgV6YUyG9bBIVUjrJmUKDcq0tBzX-DQLIoU6aFvdcCA22pEshTS1E/Aser_Ep_23.mp4', 'آسر - الحلقة 23')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-23/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 24</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/Y-lK21xjXsnOJLqYQkw0yxc0U4zodjuJZtTfJIjE8no0LPtb1ASln6c-E6AS2mmn4cc8dTdLdRrND_G9SqycJQRw5j0hcpWyT_nwULwcAHL8F4YA/Aser_Ep_24.mp4', 'آسر - الحلقة 24')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-24/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 25</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/3oB7gHTDwqHSYKWMLdGY4_kGTuQXMQ5L3vaCAqlvQ88Fvc17Ux60YX3a8UJnvSb9Q6N1reig6OaejJpgZKrVMxeQFic8IuJhKV32RW5JmOj2eqhu/Aser_Ep_25.mp4', 'آسر - الحلقة 25')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-25/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 26</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/lHdwXqd2E5K0AtyUoHs8zyCM51o83N9V_c-LYS2Bf8jhtgHRa10hWXArQzTD4-ZlNvnVC4e2yzvLoH5wYDdsgImuWCIwCPW3-GUIXN69Alz8u4nE/Aser_Ep_26.mp4', 'آسر - الحلقة 26')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-26/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 27</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/t0kc9GySgkygsQXVnDwQrXPzC5q4h60U9XmEwbtgttpKL1pmypcYeOnWC_6OEvZvlYDZLcpirlXFULI_jSoBfU5WIbiw24rfm9QQSDAvZBWOqOu5/Aser_Ep_27.mp4', 'آسر - الحلقة 27')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-27/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 28</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/ndVRvlrvMZYvtmsoI3iDEp23WwqHg_lJtkdO1HuKIcYwFa_fZP9eQq-jJEwO8ePvsCsEhCYohjkXqPGQ0vZSxx3_EW90O16lWITkKYPDn7pmDnJq/Aser_Ep_28.mp4', 'آسر - الحلقة 28')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-28/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 29</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/Y7jeCZJhoGqVTYPV2aQjzkR0FOi1fPw7fmZ8ZYL1lARavWaM2RCs4nzfbPrge_Y6PhPyIipYrSqmCCPlnDibT0T8ra4iSg5A18SQPm3BB31DQpHc/Aser_Ep_29.mp4', 'آسر - الحلقة 29')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-29/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 30</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://psv4.userapi.com/s/v1/d/kP15B_6T45WIeR1UFjI6CdvkJEOIAcPOa4Cq1QhfKFep2-NtqoqLksF2IuD2zfmeMu2Hw9oB3-BQF6eonaQn6nhxUCT02MsK5qYwgx27kYzeyxAn/Aser_Ep_30.mp4', 'آسر - الحلقة 30')">مشاهدة</a>
+            <a href="https://www.qvid.cc/albaplayer/aser-ep-30/" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- مسلسل الاختيار -->
+    <div class="series-block">
+      <img src="ekhteyar.png" alt="صورة مسلسل الاختيار" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ekhteyar')">مسلسل الاختيار ▼</div>
+      <ul id="ekhteyar" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/playlist/x6pgk6', 'الاختيار - الحلقة 1')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x7tj92r', 'الاختيار - الحلقة 2')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.dailymotion.com/embed/video/x7tk6ke', 'الاختيار - الحلقة 3')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/RChXt0g6yDI?si=jbvGMZy3c5Mp90sG', 'الاختيار - الحلقة 4')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/hbe-Mco_MIA?si=pXLnOvDYnkhDt6o6', 'الاختيار - الحلقة 5')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/BhzZP/vt/frame', 'الاختيار - الحلقة 6')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/A3Rfw/vt/frame', 'الاختيار - الحلقة 7')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/f78mq39/vt/frame', 'الاختيار - الحلقة 8')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/tFShU/vt/frame', 'الاختيار - الحلقة 9')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/i4252s5/vt/frame', 'الاختيار - الحلقة 10')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/z50mfuu/vt/frame', 'الاختيار - الحلقة 11')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/k29tqq1/vt/frame', 'الاختيار - الحلقة 12')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/C5q9H/vt/frame', 'الاختيار - الحلقة 13')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/WhHnE/vt/frame', 'الاختيار - الحلقة 14')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/ejZ0W/vt/frame', 'الاختيار - الحلقة 15')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/z10qkv0/vt/frame', 'الاختيار - الحلقة 16')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/y82rzyu/vt/frame', 'الاختيار - الحلقة 17')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/j327014/vt/frame', 'الاختيار - الحلقة 18')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/c4187x6/vt/frame', 'الاختيار - الحلقة 19')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/l1N9j/vt/frame', 'الاختيار - الحلقة 20')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/dkoIH/vt/frame', 'الاختيار - الحلقة 21')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/m51gr36/vt/frame', 'الاختيار - الحلقة 22')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 23</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/s06zn02/vt/frame', 'الاختيار - الحلقة 23')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 24</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vidspeeds.com:2096/3h8gg6n4ue7k.html', 'الاختيار - الحلقة 24')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 25</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/v61146v/vt/frame', 'الاختيار - الحلقة 25')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 26</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/k1643du/vt/frame', 'الاختيار - الحلقة 26')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 27</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/1s2yD/vt/frame', 'الاختيار - الحلقة 27')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 28</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/b31244c/vt/frame', 'الاختيار - الحلقة 28')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 29</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/a61pbwi/vt/frame', 'الاختيار - الحلقة 29')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 30 والاخيرة</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.aparat.com/video/video/embed/videohash/u588349/vt/frame', 'الاختيار - الحلقة 30')">مشاهدة</a>
+            <a href="#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        
+      </ul>
+    </div>
+
+    <!-- مسلسل خطيئة اخيرة -->
+    <div class="series-block">
+      <img src="katiaa.png" alt="صورة خطيئة اخيرة" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('katiaa')">مسلسل خطيئة اخيرة ▼</div>
+      <ul id="katiaa" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/01.mp4', 'خطيئة أخيرة - الحلقة 1', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/01.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/02.mp4', 'خطيئة أخيرة - الحلقة 2', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/02.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/03.mp4', 'خطيئة أخيرة - الحلقة 3', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/03.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/04.mp4', 'خطيئة أخيرة - الحلقة 4', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/04.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/05.mp4', 'خطيئة أخيرة - الحلقة 5', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/05.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/06.mp4', 'خطيئة أخيرة - الحلقة 6', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/06.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/07.mp4', 'خطيئة أخيرة - الحلقة 7', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/07.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/08.mp4', 'خطيئة أخيرة - الحلقة 8', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/08.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/09.mp4', 'خطيئة أخيرة - الحلقة 9', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/09.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/10.mp4', 'خطيئة أخيرة - الحلقة 10', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/10.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/11.mp4', 'خطيئة أخيرة - الحلقة 11', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/11.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/12.mp4', 'خطيئة أخيرة - الحلقة 12', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/12.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/13.mp4', 'خطيئة أخيرة - الحلقة 13', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/13.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/14.mp4', 'خطيئة أخيرة - الحلقة 14', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/14.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/15.mp4', 'خطيئة أخيرة - الحلقة 15', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/15.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/16.mp4', 'خطيئة أخيرة - الحلقة 16', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/16.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/17.mp4', 'خطيئة أخيرة - الحلقة 17', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/17.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/18.mp4', 'خطيئة أخيرة - الحلقة 18', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/18.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/19.mp4', 'خطيئة أخيرة - الحلقة 19', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/19.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/20.mp4', 'خطيئة أخيرة - الحلقة 20', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/20.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/21.mp4', 'خطيئة أخيرة - الحلقة 21', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/21.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/22.mp4', 'خطيئة أخيرة - الحلقة 22', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/22.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 23</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/23.mp4', 'خطيئة أخيرة - الحلقة 23', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/23.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 24</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/24.mp4', 'خطيئة أخيرة - الحلقة 24', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/24.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 25</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/25.mp4', 'خطيئة أخيرة - الحلقة 25', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/25.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 26</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/26.mp4', 'خطيئة أخيرة - الحلقة 26', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/26.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 27</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/27.mp4', 'خطيئة أخيرة - الحلقة 27', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/27.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 28</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/28.mp4', 'خطيئة أخيرة - الحلقة 28', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/28.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 29</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/29.mp4', 'خطيئة أخيرة - الحلقة 29', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/29.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 30</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vid1.s-amm-4.store/One-Last-Sin/30.mp4', 'خطيئة أخيرة - الحلقة 30', 'video')">مشاهدة</a>
+            <a href="https://vid1.s-amm-4.store/One-Last-Sin/30.mp4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+      <div class="series-block">
+      <img src="Crystal.png" alt="صورة كريستال" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('Crystal')">مسلسل كريستال ▼</div>
+      <ul id="Crystal" class="episode-list">
+        <li>
+          <span class="episode-name">الحلقة 1</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245650&hash=b393fbf5edf48865', 'كريستال - الحلقة 1')">مشاهدة</a>
+            <a href="https://vk.com/video848030354_456245650" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 2</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245651&hash=ef024a6674ed7a64', 'كريستال - الحلقة 2')">مشاهدة</a>
+            <a href="https://vk.com/video848030354_456245651" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 3</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245652&hash=69d90cc54b56d12a', 'كريستال - الحلقة 3')">مشاهدة</a>
+            <a href="https://vk.com/video848030354_456245652" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 4</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245653&hash=eaaaba1c3520e756', 'كريستال - الحلقة 4')">مشاهدة</a>
+            <a href="https://vk.com/video848030354_456245653" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 5</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245654&hash=7c2aed3886344e8f', 'كريستال - الحلقة 5')">مشاهدة</a>
+            <a href="https://uupbom.com/03uzutjkg9cc/Crystal.S01E05.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 6</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245655&hash=b84e91222cdc7fe7', 'كريستال - الحلقة 6')">مشاهدة</a>
+            <a href="https://uupbom.com/3jtza1hcsivk/Crystal.S01E06.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 7</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245656&hash=cba68f007ae6bd12', 'كريستال - الحلقة 7')">مشاهدة</a>
+            <a href="https://uupbom.com/mfkcrmo9u74b/Crystal.S01E07.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 8</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245657&hash=82f3fa45e3edad11', 'كريستال - الحلقة 8')">مشاهدة</a>
+            <a href="https://uupbom.com/q0q7l3uddhkl/Crystal.S01E08.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 9</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245658&hash=a82cf844925f972c', 'كريستال - الحلقة 9')">مشاهدة</a>
+            <a href="https://uupbom.com/kj42wrbdfui8/Crystal.S01E09.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 10</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245659&hash=f2c7583454cb99da', 'كريستال - الحلقة 10')">مشاهدة</a>
+            <a href="https://uupbom.com/dcu8zlgrw80p/Crystal.S01E10.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 11</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245660&hash=406d6fdc8e20e01a', 'كريستال - الحلقة 11')">مشاهدة</a>
+            <a href="https://uupbom.com/nc407llpt4xm/Crystal.S01E11.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 12</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245661&hash=3297ac7a71f51f8f', 'كريستال - الحلقة 12')">مشاهدة</a>
+            <a href="https://uupbom.com/tq4u3ui0eme5/Crystal.S01E12.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 13</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245662&hash=a0d04b0536a2b8c2', 'كريستال - الحلقة 13')">مشاهدة</a>
+            <a href="https://uupbom.com/pk31bm13fxzd/Crystal.S01E13.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 14</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245663&hash=d9a7170641b63857', 'كريستال - الحلقة 14')">مشاهدة</a>
+            <a href="https://uupbom.com/alow77dds9b6/Crystal.S01E14.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 15</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245664&hash=ac8fd2422162fd71', 'كريستال - الحلقة 15')">مشاهدة</a>
+            <a href="https://uupbom.com/4y4dovao9mkj/Crystal.S01E15.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 16</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245665&hash=ab31eb15a6411ada')">مشاهدة</a>
+            <a href="https://uupbom.com/53h0zq4f1vyu/Crystal.S01E16.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 17</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245666&hash=8c437439107c69d0', 'كريستال - الحلقة 17')">مشاهدة</a>
+            <a href="https://uupbom.com/6vdugb1mb8io/Crystal.S01E17.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 18</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245667&hash=b02edc86a80e0926', 'كريستال - الحلقة 18')">مشاهدة</a>
+            <a href="https://uupbom.com/x66jq0zlglbw/Crystal.S01E18.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 19</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245668&hash=5502d0550cd05a0d', 'كريستال - الحلقة 19')">مشاهدة</a>
+            <a href="https://uupbom.com/qt1sy3c9g4wi/Crystal.S01E19.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 20</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245669&hash=d6a56e32d0576e70', 'كريستال - الحلقة 20')">مشاهدة</a>
+            <a href="https://uupbom.com/yowqmppferqg/Crystal.S01E20.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 21</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245670&hash=9d22a111133070a7', 'كريستال - الحلقة 21')">مشاهدة</a>
+            <a href="https://uupbom.com/m3c87pb6l4tu/Crystal.S01E21.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 22</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245671&hash=705a21436cdb685c', 'كريستال - الحلقة 22')">مشاهدة</a>
+            <a href="https://uupbom.com/aiyzhv5nwoxv/Crystal.S01E22.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 23</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245672&hash=247174dc27db26a0', 'كريستال - الحلقة 23')">مشاهدة</a>
+            <a href="https://uupbom.com/pqxgw7gz5i7y/Crystal.S01E23.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 24</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245673&hash=dfa6fdbed106a878', 'كريستال - الحلقة 24')">مشاهدة</a>
+            <a href="https://uupbom.com/z1vd4cp7qm6v/Crystal.S01E24.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 25</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245674&hash=d86745035da3b3a8', 'كريستال - الحلقة 25')">مشاهدة</a>
+            <a href="https://uupbom.com/0tq0dvma4ei0/Crystal.S01E25.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 26</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245675&hash=4478637bd61ac533', 'كريستال - الحلقة 26')">مشاهدة</a>
+            <a href="https://down.mdiaload.com/download5171512" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 27</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245676&hash=e97b743291ba9b03', 'كريستال - الحلقة 27')">مشاهدة</a>
+            <a href="https://uupbom.com/kce3cnphfbrj/Crystal.S01E27.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 28</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245677&hash=4f63e7319cb43267', 'كريستال - الحلقة 28')">مشاهدة</a>
+            <a href="https://uupbom.com/9qtlptvqqkaf/Crystal.S01E28.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 29</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245678&hash=f7f4a9f9070e2957', 'كريستال - الحلقة 29')">مشاهدة</a>
+            <a href="https://uupbom.com/dtahbq8pyt0v/Crystal.S01E29.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 30</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245679&hash=b9b6ab81f0c08c75', 'كريستال - الحلقة 30')">مشاهدة</a>
+            <a href="https://uupbom.com/vx8yugixrhhx/Crystal.S01E30.mp4.html" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+         <li>
+          <span class="episode-name">الحلقة 31</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245680&hash=9979b74418110b4d', 'كريستال - الحلقة 31')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245680&hash=9979b74418110b4d" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 32</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245681&hash=cba68fe2ead4ee45', 'كريستال - الحلقة 32')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245681&hash=cba68fe2ead4ee45" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 33</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245682&hash=69bed027cc0bce35', 'كريستال - الحلقة 33')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245682&hash=69bed027cc0bce35" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 34</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245683&hash=101cf4c482214443', 'كريستال - الحلقة 34')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245683&hash=101cf4c482214443" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 35</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245684&hash=17408b154c1b8923', 'كريستال - الحلقة 35')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245684&hash=17408b154c1b8923" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 36</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245685&hash=3bb423964516a8c1', 'كريستال - الحلقة 36')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245685&hash=3bb423964516a8c1" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 37</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245686&hash=19b24b92a66f3da9', 'كريستال - الحلقة 37')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245686&hash=19b24b92a66f3da9" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 38</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245687&hash=b59144e6e49a359b', 'كريستال - الحلقة 38')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245687&hash=b59144e6e49a359b" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 39</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245688&hash=2fcdc43773501bd2', 'كريستال - الحلقة 39')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245688&hash=2fcdc43773501bd2" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 40</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245689&hash=fa9cb9cffd0ad5b5', 'كريستال - الحلقة 40')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245689&hash=fa9cb9cffd0ad5b5" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 41</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245690&hash=54114e415a423e10', 'كريستال - الحلقة 41')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245690&hash=54114e415a423e10" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 42</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245691&hash=a5e72698bc69b0b2', 'كريستال - الحلقة 42')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245691&hash=a5e72698bc69b0b2" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 43</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245692&hash=657871f817d20d8e', 'كريستال - الحلقة 43')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245692&hash=657871f817d20d8e" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 44</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245693&hash=9e296adb8ff4cbbb', 'كريستال - الحلقة 44')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245693&hash=9e296adb8ff4cbbb" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 45</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245694&hash=3e524f6e441ff8e9', 'كريستال - الحلقة 45')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245694&hash=3e524f6e441ff8e9" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 46</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245695&hash=24ca9532e8b8abd9', 'كريستال - الحلقة 46')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245695&hash=24ca9532e8b8abd9" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 47</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245696&hash=ff97ce89f3eed10c', 'كريستال - الحلقة 47')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245696&hash=ff97ce89f3eed10c" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 48</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245697&hash=df832a9f62c3b11e', 'كريستال - الحلقة 48')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245697&hash=df832a9f62c3b11e" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 49</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245698&hash=fc9bbdfcc3642de4', 'كريستال - الحلقة 49')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245698&hash=fc9bbdfcc3642de4" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 50</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848030354&id=456245699&hash=b19d4d3de3f9cd42', 'كريستال - الحلقة 50')">مشاهدة</a>
+            <a href="https://vk.com/video_ext.php?oid=848030354&id=456245699&hash=b19d4d3de3f9cd42" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 51</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240313&hash=2f8bfa32eb49da63', 'كريستال - الحلقة 51')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240313&hash=2f8bfa32eb49da63" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 52</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240314&hash=d89eb64991782f4b', 'كريستال - الحلقة 52')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240314&hash=d89eb64991782f4b" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 53</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240315&hash=8523b566955947f5', 'كريستال - الحلقة 53')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240315&hash=8523b566955947f5" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 54</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240316&hash=027f36e8cc8ffea5', 'كريستال - الحلقة 54')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240316&hash=027f36e8cc8ffea5" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 55</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240317&hash=77e6e5020f427477', 'كريستال - الحلقة 55')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240317&hash=77e6e5020f427477" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 56</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240318&hash=132e9c5786f13399', 'كريستال - الحلقة 56')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240318&hash=132e9c5786f13399" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 57</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240319&hash=77cef0ee54539f05', 'كريستال - الحلقة 57')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240319&hash=77cef0ee54539f05" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 58</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240320&hash=eeb16075b4cc960e', 'كريستال - الحلقة 58')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240320&hash=eeb16075b4cc960e" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 59</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240321&hash=0c9b969d5d792489', 'كريستال - الحلقة 59')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240321&hash=0c9b969d5d792489" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+          <span class="episode-name">الحلقة 60</span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vkvideo.ru/video_ext.php?oid=865533859&id=456240322&hash=b3d5ee9651ba5129', 'كريستال - الحلقة 60')">مشاهدة</a>
+            <a href="https://vkvideo.ru/video_ext.php?oid=865533859&id=456240322&hash=b3d5ee9651ba5129" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+  
+  <div class="footer">
+    © 2025 استراحة ناصر | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      const title = el.previousElementSibling;
+      
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        title.classList.remove('active');
+      } else {
+        el.style.display = 'block';
+        title.classList.add('active');
+      }
+    }
+    
+    function playVideo(url, title, type = 'iframe') {
+      const player = document.getElementById('video-player');
+      const titleElement = document.getElementById('player-title');
+      
+      // تحديث عنوان المشغل
+      titleElement.textContent = title;
+      
+      // إعداد مشغل الفيديو
+      player.innerHTML = '';
+      
+      if (type === 'video') {
+        // فيديو مباشر (MP4)
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', url);
+        videoElement.setAttribute('controls', true);
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        player.appendChild(videoElement);
+      } else {
+        // تضمين من مواقع خارجية
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url);
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', true);
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        player.appendChild(iframe);
+      }
+      
+      // التمرير إلى مشغل الفيديو
+      document.querySelector('.video-player-container').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    function closeVideoPlayer() {
+      const player = document.getElementById('video-player');
+      player.innerHTML = '<div class="no-video-selected"><i>▶️</i><div>لم يتم اختيار أي فيديو للعرض</div></div>';
+      document.getElementById('player-title').textContent = 'اختر حلقة لمشاهدتها';
+    }
+  </script>
+
+</body>
+</html>

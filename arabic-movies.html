@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>أفلام عربية</title>
+  <style>
+    body {
+      background: #F0FFFF;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #000000;
+      margin-bottom: 30px;
+    }
+    
+    .navbar {
+      background-color: #B0E0E6;
+      overflow: auto;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      background-color: #1a1aff;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .video-player-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #B0E0E6;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .video-player-title {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 450px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player iframe, 
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .close-player-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4757;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .close-player-btn:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+    
+    .no-video-selected {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #aaa;
+      font-size: 20px;
+      background: #222;
+      flex-direction: column;
+    }
+    
+    .no-video-selected i {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .series-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .series-block {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .series-block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .series-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .series-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .series-title {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .series-title:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .series-title::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .series-title.active::after {
+      transform: rotate(180deg);
+    }
+
+    .episode-list {
+      list-style: none;
+      padding: 0 20px 20px 20px;
+      margin: 0 0 20px 0;
+      display: none;
+      background-color: #F0F8FF;
+      border-radius: 0 0 15px 15px;
+      box-shadow: inset 0 0 10px #CFE2FF;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .episode-list::-webkit-scrollbar-track {
+      background: #e1e8ff;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb {
+      background: #4facfe;
+      border-radius: 10px;
+    }
+    
+    .episode-list::-webkit-scrollbar-thumb:hover {
+      background: #00f2fe;
+    }
+
+    .episode-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #C0D8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .episode-list li:hover {
+      background: #e1edff;
+    }
+
+    .episode-list li:last-child {
+      border-bottom: none;
+    }
+
+    .episode-name {
+      font-weight: bold;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3498db, #1a5ca3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1a5ca3, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-download {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(to right, #27ae60, #2ecc71);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #B0E0E6;
+      border-radius: 15px;
+      color: #003366;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-player {
+        height: 300px;
+      }
+      
+      .series-title {
+        font-size: 18px;
+        padding: 12px 15px;
+      }
+      
+      .episode-name {
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .video-player {
+        height: 250px;
+      }
+      
+      .series-title {
+        font-size: 16px;
+      }
+      
+      .episode-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="arabic-series.html">📺 مسلسلات عربية</a>
+    <a href="arabic-movies.html">🎬 أفلام عربية</a>
+    <a href="kids.html">👶 الأطفال</a>
+    <a href="religion.html"> وثائقيات📽</a>
+    <a href="anime.html">🎌 الأنمي</a>
+    <a href="episode_external_with_download.html">🛰 بث مباشر للقنوات الفضائية</a>
+  </div>
+
+  <h1>📺 أفلام عربية</h1>
+
+<!-- مشغل الفيديو -->
+  <div class="video-player-container">
+    <div class="video-player-title" id="player-title">اختر فيلم لمشاهدتة</div>
+    <button class="close-player-btn" onclick="closeVideoPlayer()">✕</button>
+    <div class="video-player" id="video-player">
+      <div class="no-video-selected">
+        <i>▶️</i>
+        <div>لم يتم اختيار أي فيديو للعرض</div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="sror.png" alt="صورة فيلم ليلة  هنا  و سرور" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('sror')"> فيلم ليلة  هنا  و  سرور ▼</div>
+      <ul id="sror" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+           <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=746751249&id=456239216&hash=7e258f88452aba71', 'ليلة  هنا و سرور- فيلم ')">مشاهدة</a>
+           
+            <a href="https://vkvideo.ru/video746751249_456239216?ref_domain=mycima.cc"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+        </ul>
+        </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="dshash.png" alt="صورة فيلم الدشاش" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('dshash')"> فيلم الدشاش ▼</div>
+      <ul id="dshash" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=787385537&id=456260920&hash=885cbf565888c0b6', 'الدشاش- فيلم ')">مشاهدة</a>
+           
+            <a href="https://m.vkvideo.ru/video-221539815_456240294" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+       </div>
+       <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="rstart.png" alt="صورة فيلم ريستارت" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('rstart')"> فيلم ريستارت ▼</div>
+      <ul id="rstart" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=787385537&id=456260909&hash=1b40e7669a350c0b', 'ريستارت  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://m.vkvideo.ru/video-221539815_456240293"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+        </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="mx.png" alt="صورة فيلم مستر أكس" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('mx')"> فيلم مستر أكس ▼</div>
+      <ul id="mx" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://vk.com/video_ext.php?oid=848084895&id=456245063&hash=21608574a2222dc2', 'مستر أكس  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://m.vkvideo.ru/video848084895_456245063"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="hnidi.png" alt="صورة فيلم هنيدي في الادغال" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('hnidi')"> فيلم هنيدي  في  الادغال ▼</div>
+      <ul id="hnidi" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/duPtT-o87TM?si=zGMuLx8YkJEsXnVC', 'هنيدي  في  الادغال- فيلم ')">مشاهدة</a>
+           
+            <a href="https://youtube.com/embed/duPtT-o87TM?si=zGMuLx8YkJEsXnVC"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="dilr.png" alt="صورة فيلم الديلر" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('dilr')"> فيلم الديلر ▼</div>
+      <ul id="dilr" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/u7VgxLKOTb8?si=Jh-Jqc4nge9lpHa6', 'الديلر  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/u7VgxLKOTb8?si=Jh-Jqc4nge9lpHa6"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="ashan.png" alt="صورة فيلم عشان خارجين" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ashan')"> فيلم عشان  خارجين ▼</div>
+      <ul id="ashan" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/FiTy3_qKmw0?si=yxcA20FCjeSG1D9b', 'عشان خارجين  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/FiTy3_qKmw0?si=yxcA20FCjeSG1D9b"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="antr.png" alt="صورة فيلم عنترابن شداد" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('antr')"> فيلم عنتر  ابن  ابن  ابن  ابن  شداد ▼</div>
+      <ul id="antr" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/8U1UfpZ5UIc?si=1OiaFdLBYATJCGYI', 'عنتر  ابن  ابن ابن ابن شداد- فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/8U1UfpZ5UIc?si=1OiaFdLBYATJCGYI"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="ams.png" alt="صورة فيلم عمر و سلمى" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ams')"> فيلم عمر و سلمى ▼</div>
+      <ul id="ams" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/cAsqgAID5SY?si=ZTU6Dx4GnAexP-IY', 'عمر و سلمى  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/cAsqgAID5SY?si=ZTU6Dx4GnAexP-IY"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="zki.png" alt="صورة فيلم زكي شان" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('zki')"> فيلم زكي  شان ▼</div>
+      <ul id="zki" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/j_2kpu0VHbk?si=UROqQvgP6u_GhBHo', 'زكي  شان - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/j_2kpu0VHbk?si=UROqQvgP6u_GhBHo"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="lmp.png" alt="صورة فيلم اللمبي الجديد" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('lmp')"> فيلم اللمبي  الجديد ▼</div>
+      <ul id="lmp" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/a-B8sSFvYS4?si=ligwvVOXICKmwmys', 'اللمبي  الجديد - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/a-B8sSFvYS4?si=ligwvVOXICKmwmys"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="shatr.png" alt="صورة فيلم الشاطر" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('shatr')"> فيلم الشاطر ▼</div>
+      <ul id="shatr" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://youtube.com/embed/YLFwFUmuz0s?si=NTffyTvaOjcjFIJG', 'الشاطر  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://youtube.com/embed/YLFwFUmuz0s?si=NTffyTvaOjcjFIJG"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="ash.png" alt="صورة فيلم عش البلبل" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ash')"> فيلم عش البلبل ▼</div>
+      <ul id="ash" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://www.youtube.com/embed/bjkAF89aHaY?si=VXFf3wjDTsjrqP1K', 'عش البلبل  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://www.youtube.com/embed/bjkAF89aHaY?si=VXFf3wjDTsjrqP1K"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="mshro.png" alt="صورة فيلم المشروع" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('mshro')">X فيلم المشروع  ▼</div>
+      <ul id="mshro" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://geo.dailymotion.com/player.html?video=x9llnjy', 'المشروع  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://geo.dailymotion.com/player.html?video=x9llnjy"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="ahmed.png" alt="صورة فيلم أحمد واحمد" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ahmed')"> فيلم أحمد واحمد ▼</div>
+      <ul id="ahmed" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://geo.dailymotion.com/player.html?video=x9nnuwe', 'احمد  واحمد - فيلم ')">مشاهدة</a>
+           
+            <a href="https://dai.ly/x9nnuwe"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="harmi.png" alt="صورة فيلم حرامي حريم" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('harmi')"> فيلم حرامي حريم ▼</div>
+      <ul id="harmi" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://geo.dailymotion.com/player.html?video=x8il9f4', 'حرامي حريم  - فيلم ')">مشاهدة</a>
+           
+            <a href="https://geo.dailymotion.com/player.html?video=x8il9f4"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+             </div>
+        <div class="series-list">
+
+      
+    <div class="series-block">
+      <img src="ghim.png" alt="صورة فيلم جحيم في الهند" class="series-thumbnail">
+      <div class="series-title" onclick="toggleEpisodes('ghim')"> فيلم جحيم  في  الهند ▼</div>
+      <ul id="ghim" class="episode-list">
+        <li>
+          <span class="episode-name">الفيلم </span>
+          <div>
+            <a href="#" class="btn" onclick="playVideo('https://geo.dailymotion.com/player.html?video=x9icvz8', 'جحيم  في  الهند- فيلم ')">مشاهدة</a>
+           
+            <a href="https://geo.dailymotion.com/player.html?video=x9icvz8"#" class="btn btn-download" download>تحميل</a>
+          </div>
+        </li>
+        <li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  
+  <div class="footer">
+    © 2025 استراحة ناصر | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    function toggleEpisodes(id) {
+      const el = document.getElementById(id);
+      const title = el.previousElementSibling;
+      
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        title.classList.remove('active');
+      } else {
+        el.style.display = 'block';
+        title.classList.add('active');
+      }
+    }
+    
+    function playVideo(url, title, type = 'iframe') {
+      const player = document.getElementById('video-player');
+      const titleElement = document.getElementById('player-title');
+      
+      // تحديث عنوان المشغل
+      titleElement.textContent = title;
+      
+      // إعداد مشغل الفيديو
+      player.innerHTML = '';
+      
+      if (type === 'video') {
+        // فيديو مباشر (MP4)
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', url);
+        videoElement.setAttribute('controls', true);
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        player.appendChild(videoElement);
+      } else {
+        // تضمين من مواقع خارجية
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url);
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', true);
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        player.appendChild(iframe);
+      }
+      
+      // التمرير إلى مشغل الفيديو
+      document.querySelector('.video-player-container').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    function closeVideoPlayer() {
+      const player = document.getElementById('video-player');
+      player.innerHTML = '<div class="no-video-selected"><i>▶️</i><div>لم يتم اختيار أي فيديو للعرض</div></div>';
+      document.getElementById('player-title').textContent = 'اختر فيلم لمشاهدتة';
+    }
+  </script>
+
+</body>
+</html>
+
+  
+
