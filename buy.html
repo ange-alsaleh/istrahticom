@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بيع كروت الإنترنت</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .package {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .package:hover {
+            border-color: #007bff;
+            background-color: #f0f7ff;
+        }
+        .package.selected {
+            border-color: #007bff;
+            background-color: #e6f2ff;
+        }
+        .package h3 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+        .package p {
+            margin-bottom: 5px;
+        }
+        .price {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 1.2em;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6f7ee;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>شراء كرت الإنترنت</h1>
+        
+        <div class="packages">
+            <div class="package" data-id="1" data-duration="1d" data-price="1000">
+                <h3>باقة يوم واحد</h3>
+                <p>سرعة 10M/5M</p>
+                <p>سعر: <span class="price">1,000 ريال يمني</span></p>
+            </div>
+            
+            <div class="package" data-id="2" data-duration="7d" data-price="5000">
+                <h3>باقة أسبوعية</h3>
+                <p>سرعة 10M/5M</p>
+                <p>سعر: <span class="price">5,000 ريال يمني</span></p>
+            </div>
+            
+            <div class="package" data-id="3" data-duration="30d" data-price="15000">
+                <h3>باقة شهرية</h3>
+                <p>سرعة 20M/10M</p>
+                <p>سعر: <span class="price">15,000 ريال يمني</span></p>
+            </div>
+        </div>
+        
+        <button id="payBtn" disabled>ادفع الآن</button>
+        
+        <div id="result" class="result">
+            <h3>تمت العملية بنجاح!</h3>
+            <p>اسم المستخدم: <span id="username"></span></p>
+            <p>كلمة المرور: <span id="password"></span></p>
+            <p>المدة: <span id="duration"></span></p>
+            <button onclick="copyCredentials()">نسخ البيانات</button>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">تم نسخ البيانات بنجاح!</div>
+
+    <script>
+        // إعدادات المايكروتيك
+        const routerConfig = {
+            ip: "10.22.0.1",  // استبدل بIP جهازك
+            user: "user1",
+            password: "rrr@@2024",
+            customer: "admin"  // اسم العميل في User Manager
+        };
+        
+        // عناصر الصفحة
+        const packages = document.querySelectorAll('.package');
+        const payBtn = document.getElementById('payBtn');
+        const resultDiv = document.getElementById('result');
+        const usernameSpan = document.getElementById('username');
+        const passwordSpan = document.getElementById('password');
+        const durationSpan = document.getElementById('duration');
+        const notification = document.getElementById('notification');
+        
+        // متغيرات التحديد
+        let selectedPackage = null;
+        
+        // تحديد الباقة
+        packages.forEach(pkg => {
+            pkg.addEventListener('click', () => {
+                // إزالة التحديد من جميع الباقات
+                packages.forEach(p => p.classList.remove('selected'));
+                
+                // تحديد الباقة المختارة
+                pkg.classList.add('selected');
+                selectedPackage = {
+                    id: pkg.dataset.id,
+                    duration: pkg.dataset.duration,
+                    price: pkg.dataset.price
+                };
+                
+                // تفعيل زر الدفع
+                payBtn.disabled = false;
+            });
+        });
+        
+        // دفع و إنشاء المستخدم
+        payBtn.addEventListener('click', async () => {
+            if (!selectedPackage) return;
+            
+            // تعطيل الزر أثناء المعالجة
+            payBtn.disabled = true;
+            payBtn.textContent = 'جاري المعالجة...';
+            
+            try {
+                // توليد بيانات المستخدم
+                const username = "user" + Math.floor(Math.random() * 9000 + 1000);
+                const password = Math.random().toString(36).slice(2, 10);
+                
+                // إنشاء المستخدم في User Manager
+                await createUserManagerUser(username, password);
+                
+                // تفعيل الباقة
+                await activateUserPackage(username, selectedPackage.duration);
+                
+                // عرض النتيجة
+                usernameSpan.textContent = username;
+                passwordSpan.textContent = password;
+                durationSpan.textContent = formatDuration(selectedPackage.duration);
+                resultDiv.style.display = 'block';
+                
+                // إرسال إشعار
+                showNotification(`تم إنشاء الحساب بنجاح!\nاسم المستخدم: ${username}\nكلمة المرور: ${password}`);
+                
+            } catch (error) {
+                alert(`حدث خطأ: ${error.message}`);
+                payBtn.disabled = false;
+                payBtn.textContent = 'ادفع الآن';
+            }
+        });
+        
+        // إنشاء مستخدم في User Manager
+        async function createUserManagerUser(username, password) {
+            const response = await fetch(`http://${routerConfig.ip}/rest/tool/user-manager/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa(`${routerConfig.user}:${routerConfig.password}`)
+                },
+                body: JSON.stringify({
+                    "customer": routerConfig.customer,
+                    "username": username,
+                    "password": password,
+                    "disabled": "no"
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('فشل في إنشاء المستخدم');
+            }
+        }
+        
+        // تفعيل الباقة للمستخدم
+        async function activateUserPackage(username, duration) {
+            const response = await fetch(`http://${routerConfig.ip}/rest/tool/user-manager/user/create-and-activate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa(`${routerConfig.user}:${routerConfig.password}`)
+                },
+                body: JSON.stringify({
+                    "customer": routerConfig.customer,
+                    "username": username,
+                    "profile": "4-hours",  // استبدل باسم البروفايل المناسب
+                    "uptime": duration
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('فشل في تفعيل الباقة');
+            }
+        }
+        
+        // تنسيق المدة
+        function formatDuration(duration) {
+            const days = parseInt(duration);
+            if (days === 1) return 'يوم واحد';
+            if (days <= 7) return `${days} أيام`;
+            if (days === 30) return 'شهر كامل';
+            return duration;
+        }
+        
+        // نسخ بيانات الدخول
+        function copyCredentials() {
+            const text = `اسم المستخدم: ${usernameSpan.textContent}\nكلمة المرور: ${passwordSpan.textContent}`;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('تم نسخ البيانات بنجاح!');
+            });
+        }
+        
+        // إظهار الإشعار
+        function showNotification(message) {
+            if (Notification.permission === 'granted') {
+                new Notification(message);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification(message);
+                    } else {
+                        // إظهار إشعار داخلي إذا لم يوافق المستخدم
+                        notification.textContent = message;
+                        notification.style.display = 'block';
+                        setTimeout(() => {
+                            notification.style.display = 'none';
+                        }, 3000);
+                    }
+                });
+            } else {
+                // إظهار إشعار داخلي
+                notification.textContent = message;
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // طلب الإذن للإشعارات عند تحميل الصفحة
+        window.onload = () => {
+            if ('Notification' in window) {
+                Notification.requestPermission();
+            }
+        };
+    </script>
+</body>
+</html>
