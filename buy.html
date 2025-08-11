@@ -1,205 +1,149 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>الدعم الفني المباشر - شبكة الضياء-نت</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Tajawal&display=swap');
-  body {
-    font-family: 'Tajawal', sans-serif;
-    background: #15213b;
-    color: white;
-    margin: 0; padding: 0;
-    display: flex; justify-content: center; align-items: center; height: 100vh;
-  }
-  #chat {
-    width: 100%;
-    max-width: 480px;
-    background: rgba(21,33,59,0.95);
-    border-radius: 12px;
-    box-shadow: 0 0 15px #00f7ff;
-    display: flex;
-    flex-direction: column;
-    height: 600px;
-  }
-  #messages {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-  }
-  .message {
-    margin-bottom: 12px;
-    padding: 10px 14px;
-    border-radius: 15px;
-    max-width: 75%;
-    line-height: 1.3;
-    word-wrap: break-word;
-  }
-  .user {
-    background: #0f4862;
-    align-self: flex-end;
-  }
-  .support {
-    background: #00f7ff;
-    color: #15213b;
-    align-self: flex-start;
-  }
-  #inputArea {
-    display: flex;
-    border-top: 1px solid #00f7ff;
-  }
-  #messageInput {
-    flex: 1;
-    border: none;
-    padding: 15px;
-    border-radius: 0 0 0 12px;
-    font-size: 16px;
-    background: #15213b;
-    color: white;
-    resize: none;
-  }
-  #messageInput:focus {
-    outline: none;
-  }
-  #sendBtn, #clearBtn {
-    background: #00f7ff;
-    border: none;
-    padding: 0 20px;
-    cursor: pointer;
-    color: #15213b;
-    font-weight: bold;
-    border-radius: 0 0 12px 0;
-    transition: background 0.3s ease;
-    margin-left: 5px;
-  }
-  #sendBtn:hover, #clearBtn:hover {
-    background: #0ac6d9;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الدعم الفني المباشر - شبكة الضياء-نت</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #15213b;
+      color: white;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center; height: 100vh;
+    }
+    #chat {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(21,33,59,0.9);
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00f7ff;
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+    }
+    #messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .message {
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      border-radius: 15px;
+      max-width: 75%;
+      line-height: 1.3;
+    }
+    .user {
+      background: #0f4862;
+      align-self: flex-end;
+    }
+    .support {
+      background: #00f7ff;
+      color: #15213b;
+      align-self: flex-start;
+    }
+    #inputArea {
+      display: flex;
+      border-top: 1px solid #00f7ff;
+    }
+    #messageInput {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      border-radius: 0 0 0 12px;
+      font-size: 16px;
+      background: #15213b;
+      color: white;
+    }
+    #messageInput:focus {
+      outline: none;
+    }
+    #sendBtn {
+      background: #00f7ff;
+      border: none;
+      padding: 0 20px;
+      cursor: pointer;
+      color: #15213b;
+      font-weight: bold;
+      border-radius: 0 0 12px 0;
+      transition: background 0.3s ease;
+    }
+    #sendBtn:hover {
+      background: #0ac6d9;
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getDatabase, ref, push, query, orderByChild, equalTo, onChildAdded } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded, query, orderByChild, equalTo, get, remove } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
+      authDomain: "support-chat-31aa6.firebaseapp.com",
+      databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "support-chat-31aa6",
+      storageBucket: "support-chat-31aa6.appspot.com",
+      messagingSenderId: "1079004120541",
+      appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
+      measurementId: "G-8NNELSESB8"
+    };
 
-  // إعدادات Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
-    authDomain: "support-chat-31aa6.firebaseapp.com",
-    databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "support-chat-31aa6",
-    storageBucket: "support-chat-31aa6.appspot.com",
-    messagingSenderId: "1079004120541",
-    appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
-    measurementId: "G-8NNELSESB8"
-  };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const messagesRef = ref(db, "supportMessages");
+    // حفظ chatId في المتصفح (كل زبون له chatId خاص)
+    let chatId = localStorage.getItem('chatId');
+    if (!chatId) {
+      chatId = Math.random().toString(36).substring(2, 10);
+      localStorage.setItem('chatId', chatId);
+    }
 
-  // جلب chatId من localStorage أو توليده جديد
-  let chatId = localStorage.getItem("supportChatId");
-  if (!chatId) {
-    chatId = "chat_" + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem("supportChatId", chatId);
-  }
+    // إحضار رسائل الزبون فقط (فلترة حسب chatId)
+    const messagesRef = query(ref(db, "supportMessages"), orderByChild("chatId"), equalTo(chatId));
 
-  const messagesDiv = document.getElementById("messages");
-  const input = document.getElementById("messageInput");
-  const sendBtn = document.getElementById("sendBtn");
-  const clearBtn = document.getElementById("clearBtn");
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
 
-  // دالة لإضافة رسالة للعرض
-  function addMessage(text, sender) {
-    const div = document.createElement("div");
-    div.classList.add("message");
-    div.classList.add(sender === "user" ? "user" : "support");
-    div.textContent = text;
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-
-  // جلب الرسائل الخاصة بـ chatId فقط وعرضها
-  function loadMessages() {
-    // نظّف الشاشة
-    messagesDiv.innerHTML = "";
-
-    // استعلام لفلترة حسب chatId
-    const q = query(messagesRef, orderByChild("chatId"), equalTo(chatId));
-
-    get(q).then(snapshot => {
+    // عرض الرسائل الجديدة الخاصة بهذا الزبون
+    onChildAdded(messagesRef, (snapshot) => {
       const data = snapshot.val();
       if (!data) return;
-      // عرض الرسائل بالترتيب حسب timestamp
-      const arr = Object.values(data).sort((a,b) => a.timestamp - b.timestamp);
-      arr.forEach(msg => {
-        addMessage(msg.message, msg.sender);
+
+      const div = document.createElement("div");
+      div.classList.add("message");
+      div.classList.add(data.sender === "user" ? "user" : "support");
+      div.textContent = data.message;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    // إرسال رسالة جديدة مع تخزين chatId
+    function sendMessage() {
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      push(ref(db, "supportMessages"), {
+        chatId: chatId,
+        sender: "user",
+        message: msg,
+        timestamp: Date.now()
+      }).then(() => {
+        input.value = "";
+      }).catch((error) => {
+        alert("حدث خطأ أثناء إرسال الرسالة.");
+        console.error(error);
       });
-    });
-  }
-
-  // الاستماع للرسائل الجديدة الخاصة بـ chatId فقط
-  const newMessagesQuery = query(messagesRef, orderByChild("chatId"), equalTo(chatId));
-  onChildAdded(newMessagesQuery, (snapshot) => {
-    const msg = snapshot.val();
-    if (!msg) return;
-    addMessage(msg.message, msg.sender);
-  });
-
-  // إرسال رسالة جديدة
-  function sendMessage() {
-    const msg = input.value.trim();
-    if (!msg) return;
-    push(messagesRef, {
-      sender: "user",
-      message: msg,
-      timestamp: Date.now(),
-      chatId: chatId
-    }).then(() => {
-      input.value = "";
-    }).catch(e => {
-      alert("حدث خطأ أثناء إرسال الرسالة.");
-      console.error(e);
-    });
-  }
-
-  sendBtn.addEventListener("click", sendMessage);
-  input.addEventListener("keypress", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
     }
-  });
 
-  // مسح المحادثة الحالية (رسائل هذا الـ chatId فقط)
-  clearBtn.addEventListener("click", () => {
-    if (!confirm("هل أنت متأكد من حذف كل رسائل هذه المحادثة؟")) return;
-
-    const q = query(messagesRef, orderByChild("chatId"), equalTo(chatId));
-    get(q).then(snapshot => {
-      const data = snapshot.val();
-      if (!data) return alert("لا توجد رسائل للحذف.");
-      const updates = {};
-      Object.keys(data).forEach(key => {
-        updates[key] = null;
-      });
-      return Promise.all([
-        ...Object.keys(updates).map(key => remove(ref(db, `supportMessages/${key}`)))
-      ]);
-    }).then(() => {
-      messagesDiv.innerHTML = "";
-      alert("تم حذف جميع رسائل هذه المحادثة.");
-    }).catch(e => {
-      alert("حدث خطأ أثناء حذف الرسائل.");
-      console.error(e);
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     });
-  });
-
-  // تحميل الرسائل عند فتح الصفحة
-  loadMessages();
-
-</script>
+  </script>
 </head>
 <body>
   <div id="chat">
@@ -207,7 +151,6 @@
     <div id="inputArea">
       <textarea id="messageInput" rows="2" placeholder="اكتب رسالتك هنا..."></textarea>
       <button id="sendBtn">إرسال</button>
-      <button id="clearBtn">حذف المحادثة</button>
     </div>
   </div>
 </body>
