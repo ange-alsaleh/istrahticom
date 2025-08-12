@@ -151,6 +151,13 @@
         alert("📩 رسالة جديدة: " + payload.notification.body);
     });
 </script>
-
+<div id="errorLog" style="color:red; padding:10px;"></div>
+<script>
+  window.onerror = function(message, source, lineno, colno, error) {
+    const logDiv = document.getElementById('errorLog');
+    logDiv.textContent = `Error: ${message} at ${source}:${lineno}:${colno}`;
+    return true; // يمنع الخطأ من الظهور في Console (اختياري)
+  };
+</script>
 </body>
 </html>
