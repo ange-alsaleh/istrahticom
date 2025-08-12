@@ -151,13 +151,18 @@
         alert("📩 رسالة جديدة: " + payload.notification.body);
     });
 </script>
-<div id="errorLog" style="color:red; padding:10px;"></div>
+<div id="errorLog" style="color:red; background:#fff0f0; padding:10px; font-size:14px;"></div>
 <script>
+  const errorLog = document.getElementById('errorLog');
+  
   window.onerror = function(message, source, lineno, colno, error) {
-    const logDiv = document.getElementById('errorLog');
-    logDiv.textContent = `Error: ${message} at ${source}:${lineno}:${colno}`;
-    return true; // يمنع الخطأ من الظهور في Console (اختياري)
+    errorLog.textContent = `خطأ: ${message} في ${source} عند السطر ${lineno} والعمود ${colno}`;
+    return false; // حتى تظهر الأخطاء في console أيضاً لو فيه
   };
+
+  window.addEventListener('unhandledrejection', function(event) {
+    errorLog.textContent = `وعد مرفوض: ${event.reason}`;
+  });
 </script>
 </body>
 </html>
