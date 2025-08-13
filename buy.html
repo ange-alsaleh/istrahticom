@@ -3,210 +3,284 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>الدعم الفني - شبكة الضياء-نت</title>
+  <title>الدعم الفني المباشر - شبكة الضياء-نت</title>
   <style>
-    body {
-      font-family: 'Tajawal', sans-serif, Arial, sans-serif;
-      background: #15213b;
-      color: white;
-      margin: 0; padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    :root{
+      --bg:#15213b; --panel:rgba(21,33,59,0.92);
+      --neon:#00f7ff; --neon-dark:#0ac6d9; --text:#ffffff;
+      --bubble-user:#0f4862; --bubble-admin:#c8e6c9; --shadow:rgba(0,0,0,.15)
     }
-    #chat {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(21, 33, 59, 0.95);
-      border-radius: 12px;
-      box-shadow: 0 0 15px #00f7ff;
-      display: flex;
-      flex-direction: column;
-      height: 600px;
+    *{box-sizing:border-box}
+    body{
+      font-family:'Tajawal',system-ui,Arial,sans-serif;
+      background:var(--bg); color:var(--text); margin:0; min-height:100vh;
+      display:flex; align-items:center; justify-content:center; padding:16px;
     }
-    #header {
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      border-bottom: 1px solid #00f7ff;
-      text-align: center;
-      background: #0c1a38;
-      border-radius: 12px 12px 0 0;
-      user-select: none;
+    .wrap{
+      width:100%; max-width:520px; display:flex; flex-direction:column; gap:12px;
     }
-    #messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
+    .card{
+      background:var(--panel); border-radius:16px; box-shadow:0 10px 24px var(--shadow);
+      border:1px solid var(--neon); overflow:hidden;
     }
-    .message {
-      max-width: 75%;
-      padding: 10px 14px;
-      border-radius: 15px;
-      line-height: 1.3;
-      word-wrap: break-word;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    header.card{
+      display:flex; align-items:center; gap:12px; padding:14px 16px;
+      background:linear-gradient(135deg, #0c162b 0%, #0f2347 60%, #11305d 100%);
     }
-    .user {
-      background: #0f4862;
-      align-self: flex-end;
-      color: white;
+    .logo{width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--neon)}
+    .titles{flex:1}
+    .titles h1{margin:0; font-size:18px; color:var(--neon)}
+    .titles p{margin:2px 0 0; font-size:12px; opacity:.85}
+    .online{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--neon)}
+    .dot{width:8px; height:8px; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon)}
+    #messages.card{
+      padding:14px; min-height:360px; max-height:60vh; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
+      background:linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05));
     }
-    .support {
-      background: #00f7ff;
-      color: #15213b;
-      align-self: flex-start;
+    .bubble{
+      max-width:78%; padding:10px 12px; border-radius:14px; line-height:1.35; box-shadow:0 4px 12px var(--shadow);
+      position:relative; word-wrap:break-word; white-space:pre-wrap;
+      animation:pop .15s ease-out;
     }
-    #inputArea {
-      display: flex;
-      border-top: 1px solid #00f7ff;
-      background: #0c1a38;
-      border-radius: 0 0 12px 12px;
+    .user{align-self:flex-end; background:var(--bubble-user); border:1px solid var(--neon)}
+    .admin{align-self:flex-start; background:#e1f5fe; color:#0b2740; border:1px solid #8be3ff}
+    .time{display:block; font-size:10px; opacity:.7; margin-top:6px}
+    @keyframes pop{from{transform:translateY(6px); opacity:0} to{transform:translateY(0); opacity:1}}
+    .quick{display:flex; gap:8px; flex-wrap:wrap; padding:10px 12px; border-top:1px solid rgba(255,255,255,.1)}
+    .chip{padding:8px 12px; border-radius:999px; border:1px solid var(--neon); background:transparent; color:var(--text);
+      font-size:12px; cursor:pointer}
+    .chip:hover{background:rgba(0,247,255,.12)}
+    .input.card{display:flex; gap:8px; padding:10px; border-top:1px solid var(--neon)}
+    textarea{
+      flex:1; resize:none; height:52px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
+      background:#0e1a30; color:var(--text); padding:10px 12px; font-family:inherit; font-size:15px;
     }
-    #messageInput {
-      flex: 1;
-      border: none;
-      padding: 15px;
-      font-size: 16px;
-      background: #15213b;
-      color: white;
-      border-radius: 0 0 0 12px;
-      resize: none;
+    textarea:focus{outline:none; border-color:var(--neon); box-shadow:0 0 0 3px rgba(0,247,255,.15)}
+    button.send{
+      min-width:88px; border:none; background:var(--neon); color:#0b2740; font-weight:700; border-radius:10px;
+      cursor:pointer; box-shadow:0 6px 16px rgba(0,247,255,.25); transition:.2s;
     }
-    #messageInput:focus {
-      outline: none;
-    }
-    #sendBtn {
-      background: #00f7ff;
-      border: none;
-      padding: 0 20px;
-      cursor: pointer;
-      color: #15213b;
-      font-weight: bold;
-      border-radius: 0 0 12px 0;
-      transition: background 0.3s ease;
-    }
-    #sendBtn:hover {
-      background: #0ac6d9;
-    }
+    button.send:active{transform:translateY(1px)}
+    .bar{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; font-size:12px; color:#bfefff}
+    .link{color:#bfefff; text-decoration:none}
+    .tools{display:flex; gap:8px}
+    .btn{padding:6px 10px; border-radius:8px; border:1px solid rgba(255,255,255,.2); background:transparent; color:#bfefff; cursor:pointer}
+    .btn:hover{border-color:var(--neon); color:var(--neon)}
   </style>
-</head>
-<body>
-  <div id="chat" role="main" aria-label="شاشة المحادثة مع الدعم الفني">
-    <div id="header">الدعم الفني لشبكة الضياء-نت</div>
-    <div id="messages" aria-live="polite" aria-relevant="additions"></div>
-    <div id="inputArea">
-      <textarea id="messageInput" rows="2" placeholder="اكتب رسالتك هنا..."></textarea>
-      <button id="sendBtn" aria-label="إرسال رسالة">إرسال</button>
-    </div>
-  </div>
 
-  <audio id="sendSound" src="send-message-sound.mp3" preload="auto"></audio>
-
+  <!-- Firebase (namespaced) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <!-- الهيدر -->
+    <header class="card">
+      <img class="logo" src="img/logo.png" alt="logo">
+      <div class="titles">
+        <h1>الدعم الفني - شبكة الضياء-نت</h1>
+        <p>نخدمك على مدار الساعة</p>
+      </div>
+      <div class="online"><span class="dot"></span> متصل الآن</div>
+    </header>
 
-  <script>
-    // إعدادات Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
-      authDomain: "support-chat-31aa6.firebaseapp.com",
-      databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "support-chat-31aa6",
-      storageBucket: "support-chat-31aa6.appspot.com",
-      messagingSenderId: "1079004120541",
-      appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
-      measurementId: "G-8NNELSESB8"
-    };
+    <!-- شريط علوي صغير -->
+    <div class="card bar">
+      <span>مرحباً! اكتب استفسارك وسيصلك الرد هنا مباشرةً.</span>
+      <div class="tools">
+        <button id="clearChat" class="btn" title="حذف محادثتي من هذا الجهاز فقط">حذف محادثتي</button>
+        <a class="link" href="tel:+967779175713">اتصال هاتفي</a>
+      </div>
+    </div>
 
-    // تهيئة Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const messaging = firebase.messaging();
+    <!-- الرسائل -->
+    <div id="messages" class="card"></div>
 
-    // استدعاء الصوت عند الإرسال
-    const sendSound = document.getElementById("sendSound");
+    <!-- إجراءات سريعة -->
+    <div class="card quick">
+      <button class="chip">مشكلة في الاتصال</button>
+      <button class="chip">استفسار عن الفاتورة</button>
+      <button class="chip">تغيير الباقة</button>
+      <button class="chip">إعدادات الراوتر</button>
+    </div>
 
-    // إنشاء chatId فريد لكل زبون وتخزينه في localStorage
-    let chatId = localStorage.getItem("chatId");
-    if (!chatId) {
-      chatId = Math.random().toString(36).substring(2, 11);
-      localStorage.setItem("chatId", chatId);
+    <!-- الإدخال -->
+    <div class="input card">
+      <textarea id="messageInput" placeholder="اكتب رسالتك هنا..."></textarea>
+      <button id="sendBtn" class="send">إرسال</button>
+    </div>
+
+    <!-- لوج أخطاء واضح على الصفحة (يساعدنا لو صار شيء) -->
+    <div id="errorLog" class="card" style="padding:10px; color:#ffdddd; background:#2b1a1a; border-color:#b33;">لا توجد أخطاء.</div>
+  </div>
+
+  <!-- صوت تنبيه (عدّل الاسم لو عندك ملف مختلف) -->
+  <audio id="ping" src="notification.mp3" preload="auto"></audio>
+
+<script>
+(function(){
+  // ===== 1) تهيئة Firebase (لا تلمس) =====
+  const firebaseConfig = {
+    apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
+    authDomain: "support-chat-31aa6.firebaseapp.com",
+    databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "support-chat-31aa6",
+    storageBucket: "support-chat-31aa6.appspot.com",
+    messagingSenderId: "1079004120541",
+    appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
+    measurementId: "G-8NNELSESB8"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // ===== 2) chatId ثابت لكل متصفح =====
+  let chatId = localStorage.getItem("chatId");
+  if (!chatId) {
+    chatId = Math.random().toString(36).slice(2, 11);
+    localStorage.setItem("chatId", chatId);
+  }
+
+  // مراجع قاعدة البيانات
+  const messagesRef = db.ref('supportMessages/' + chatId);
+  const tokenRef    = db.ref('userTokens/' + chatId);
+
+  // عناصر الصفحة
+  const messagesDiv   = document.getElementById('messages');
+  const inputEl       = document.getElementById('messageInput');
+  const sendBtn       = document.getElementById('sendBtn');
+  const clearBtn      = document.getElementById('clearChat');
+  const errorLog      = document.getElementById('errorLog');
+  const pingAudio     = document.getElementById('ping');
+
+  // ===== 3) عرض الرسائل الموجودة والجديدة =====
+  function addBubble(sender, text, ts){
+    const div = document.createElement('div');
+    div.className = 'bubble ' + (sender === 'user' ? 'user' : 'admin');
+    const time = ts ? new Date(ts) : new Date();
+    const hh = String(time.getHours()).padStart(2,'0');
+    const mm = String(time.getMinutes()).padStart(2,'0');
+    div.innerHTML = `${escapeHtml(text)}<span class="time">${hh}:${mm}</span>`;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if(sender === 'admin'){
+      // صوت بسيط عند وصول رد من الدعم
+      pingAudio.currentTime = 0;
+      pingAudio.play().catch(()=>{});
     }
+  }
 
-    const messagesRef = db.ref("supportMessages/" + chatId);
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
 
-    const messagesDiv = document.getElementById("messages");
-    const input = document.getElementById("messageInput");
-    const sendBtn = document.getElementById("sendBtn");
+  // تحميل قديم + الاستماع للجديد
+  messagesRef.off();
+  messagesRef.on('child_added', snap => {
+    const msg = snap.val();
+    if(!msg) return;
+    addBubble(msg.sender, msg.message, msg.timestamp);
+  });
 
-    // عرض الرسائل الجديدة فقط الخاصة بهذا الزبون
-    messagesRef.on("child_added", (snapshot) => {
-      const data = snapshot.val();
-      if (!data) return;
-
-      const div = document.createElement("div");
-      div.classList.add("message");
-      div.classList.add(data.sender === "user" ? "user" : "support");
-      div.textContent = data.message;
-      messagesDiv.appendChild(div);
-
-      // تمرير تلقائي لأسفل المحادثة
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-
-    // وظيفة إرسال رسالة
-    function sendMessage() {
-      const msg = input.value.trim();
-      if (!msg) return;
-      // تخزين الرسالة في Firebase
-      messagesRef.push({
-        sender: "user",
-        message: msg,
-        timestamp: Date.now(),
-      }).then(() => {
-        input.value = "";
-        sendSound.play();
-      }).catch((err) => {
-        alert("حدث خطأ أثناء إرسال الرسالة.");
-        console.error(err);
+  // ===== 4) إرسال الرسالة (يبقى شغال حتى لو الإشعارات فشلت) =====
+  async function sendMessage(){
+    const text = (inputEl.value || '').trim();
+    if(!text) return;
+    sendBtn.disabled = true;
+    try{
+      await messagesRef.push({
+        sender:'user',
+        message:text,
+        timestamp: Date.now()
       });
+      inputEl.value = '';
+      inputEl.focus();
+    }catch(e){
+      showErr('فشل إرسال الرسالة: ' + (e && e.message ? e.message : e));
+    }finally{
+      sendBtn.disabled = false;
     }
+  }
 
-    sendBtn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+  sendBtn.addEventListener('click', sendMessage);
+  inputEl.addEventListener('keydown', e=>{
+    if(e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // أزرار سريعة
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      inputEl.value = chip.textContent.trim();
+      inputEl.focus();
+    });
+  });
+
+  // حذف محادثتي من هذا المتصفح فقط
+  clearBtn.addEventListener('click', ()=>{
+    if(confirm('سيتم حذف محادثتك من هذا المتصفح فقط (لن تُحذف من النظام). المتابعة؟')){
+      localStorage.removeItem('chatId');
+      // إعادة تحميل بchatId جديد
+      location.reload();
+    }
+  });
+
+  // ===== 5) إشعارات المتصفح (اختيارية وآمنة) =====
+  (async function setupNotificationsSafe(){
+    // لا نسمح لأي خطأ هنا يوقف الصفحة
+    try{
+      // لازم https + Service Worker بالمسار الجذري
+      if(!('serviceWorker' in navigator)) return;        // غير مدعوم
+      if(!(window.isSecureContext)) return;              // لازم https
+      // تسجيل SW
+      await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+
+      // قد لا يدعم المتصفح FCM بشكل كامل؛ نجرب بحذر
+      let messaging;
+      try{
+        messaging = firebase.messaging();
+      }catch(_){ /* فايرفوكس موبايل أحياناً يرمي خطأ */ return; }
+
+      // طلب الإذن
+      const perm = await Notification.requestPermission();
+      if(perm !== 'granted') return;
+
+      // اجلب التوكن وخزّنه تحت userTokens/chatId
+      const vapidKey = 'ضع_مفتاح_VAPID_العلني_هنا'; // استبدلها بمفتاحك العام
+      const token = await messaging.getToken({ vapidKey });
+      if(token){
+        await tokenRef.set(token);
       }
-    });
-
-    // طلب إذن إشعارات المتصفح + تسجيل توكن FCM
-    messaging.requestPermission()
-      .then(() => messaging.getToken({
-        vapidKey: "BCtAdlmYCinSR7QmgiZzkz2hNg8_pfQJYWyLV1R3RmnnELxUUQST6rPwjRovxl40-DSundiW-n30C-Dt3_ICD88"
-      }))
-      .then((token) => {
-        console.log("FCM Token:", token);
-        // حفظ التوكن في قاعدة بيانات Firebase ضمن userTokens برقم chatId
-        db.ref('userTokens/' + chatId).set(token);
-      })
-      .catch((err) => {
-        console.warn("فشل طلب الإذن للإشعارات:", err);
+      // إشعار لحظي داخل الصفحة (عندما تكون مفتوحة)
+      messaging.onMessage(payload=>{
+        try{
+          const body = payload?.notification?.body || 'رسالة جديدة';
+          // تنبيه بسيط
+          pingAudio.currentTime = 0;
+          pingAudio.play().catch(()=>{});
+          // بانر متصفح (اختياري)
+          if(navigator.serviceWorker && Notification.permission === 'granted'){
+            navigator.serviceWorker.getRegistration().then(reg=>{
+              reg?.showNotification('رد جديد من الدعم الفني', { body });
+            });
+          }
+        }catch(_){}
       });
+    }catch(e){
+      // لا نفعل شيئاً سوى تسجيل الخطأ بصمت
+      console.warn('Notifications disabled:', e);
+    }
+  })();
 
-    // استقبال إشعارات FCM داخل الصفحة
-    messaging.onMessage((payload) => {
-      console.log("إشعار وارد:", payload);
-      alert("📩 لديك رسالة جديدة من الدعم");
-    });
-
-  </script>
+  // ===== 6) لوج أخطاء على الصفحة (لا يوقف التنفيذ) =====
+  function showErr(msg){
+    errorLog.textContent = 'خطأ: ' + msg;
+  }
+  window.addEventListener('error', e=> showErr(e.message));
+  window.addEventListener('unhandledrejection', e=> showErr(e.reason?.message || String(e.reason)));
+})();
+</script>
 </body>
 </html>
