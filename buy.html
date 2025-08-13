@@ -6,281 +6,267 @@
   <title>الدعم الفني المباشر - شبكة الضياء-نت</title>
   <style>
     :root{
-      --bg:#15213b; --panel:rgba(21,33,59,0.92);
-      --neon:#00f7ff; --neon-dark:#0ac6d9; --text:#ffffff;
-      --bubble-user:#0f4862; --bubble-admin:#c8e6c9; --shadow:rgba(0,0,0,.15)
+      --bg:#15213b; --card:#1b2746; --neon:#00f7ff; --ink:#0f4862; --light:#ffffff;
     }
-    *{box-sizing:border-box}
     body{
-      font-family:'Tajawal',system-ui,Arial,sans-serif;
-      background:var(--bg); color:var(--text); margin:0; min-height:100vh;
-      display:flex; align-items:center; justify-content:center; padding:16px;
+      font-family:'Tajawal',system-ui,Segoe UI,Arial; background:var(--bg); color:#fff; margin:0;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
     }
     .wrap{
-      width:100%; max-width:520px; display:flex; flex-direction:column; gap:12px;
+      width:100%; max-width:520px; background:rgba(27,39,70,.95);
+      border-radius:16px; box-shadow:0 0 16px rgba(0,247,255,.35); overflow:hidden;
+      border:1px solid rgba(0,247,255,.35);
     }
-    .card{
-      background:var(--panel); border-radius:16px; box-shadow:0 10px 24px var(--shadow);
-      border:1px solid var(--neon); overflow:hidden;
-    }
-    header.card{
+    header{
       display:flex; align-items:center; gap:12px; padding:14px 16px;
-      background:linear-gradient(135deg, #0c162b 0%, #0f2347 60%, #11305d 100%);
+      background:linear-gradient(90deg, #101a33, #0a2b4b);
+      border-bottom:1px solid rgba(0,247,255,.25);
     }
-    .logo{width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--neon)}
-    .titles{flex:1}
-    .titles h1{margin:0; font-size:18px; color:var(--neon)}
-    .titles p{margin:2px 0 0; font-size:12px; opacity:.85}
-    .online{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--neon)}
-    .dot{width:8px; height:8px; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon)}
-    #messages.card{
-      padding:14px; min-height:360px; max-height:60vh; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
-      background:linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05));
+    header img{ width:40px; height:40px; border-radius:50%; object-fit:cover; box-shadow:0 0 8px var(--neon); }
+    header .titles{ display:flex; flex-direction:column; line-height:1.2 }
+    .title{ font-weight:700; color:var(--light); text-shadow:0 0 6px var(--neon) }
+    .sub{ font-size:12px; opacity:.9 }
+    .chip{ margin-right:auto; font-size:12px; background:rgba(0,247,255,.12); border:1px solid rgba(0,247,255,.35);
+      color:var(--light); padding:4px 8px; border-radius:999px; }
+    #messages{
+      padding:16px; height:60vh; min-height:380px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
+      background:rgba(0,0,0,.15);
     }
     .bubble{
-      max-width:78%; padding:10px 12px; border-radius:14px; line-height:1.35; box-shadow:0 4px 12px var(--shadow);
-      position:relative; word-wrap:break-word; white-space:pre-wrap;
-      animation:pop .15s ease-out;
+      max-width:78%; padding:10px 14px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,.18);
+      word-wrap:break-word; white-space:pre-wrap; line-height:1.4; font-size:15px;
+      position:relative;
     }
-    .user{align-self:flex-end; background:var(--bubble-user); border:1px solid var(--neon)}
-    .admin{align-self:flex-start; background:#e1f5fe; color:#0b2740; border:1px solid #8be3ff}
-    .time{display:block; font-size:10px; opacity:.7; margin-top:6px}
-    @keyframes pop{from{transform:translateY(6px); opacity:0} to{transform:translateY(0); opacity:1}}
-    .quick{display:flex; gap:8px; flex-wrap:wrap; padding:10px 12px; border-top:1px solid rgba(255,255,255,.1)}
-    .chip{padding:8px 12px; border-radius:999px; border:1px solid var(--neon); background:transparent; color:var(--text);
-      font-size:12px; cursor:pointer}
-    .chip:hover{background:rgba(0,247,255,.12)}
-    .input.card{display:flex; gap:8px; padding:10px; border-top:1px solid var(--neon)}
-    textarea{
-      flex:1; resize:none; height:52px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
-      background:#0e1a30; color:var(--text); padding:10px 12px; font-family:inherit; font-size:15px;
+    .bubble.user{
+      align-self:flex-end; background:var(--ink); border:1px solid var(--neon);
+      border-top-left-radius:6px;
     }
-    textarea:focus{outline:none; border-color:var(--neon); box-shadow:0 0 0 3px rgba(0,247,255,.15)}
-    button.send{
-      min-width:88px; border:none; background:var(--neon); color:#0b2740; font-weight:700; border-radius:10px;
-      cursor:pointer; box-shadow:0 6px 16px rgba(0,247,255,.25); transition:.2s;
+    .bubble.admin{
+      align-self:flex-start; background:rgba(0,247,255,.15); color:#dff9ff; border:1px solid rgba(0,247,255,.5);
+      border-top-right-radius:6px;
     }
-    button.send:active{transform:translateY(1px)}
-    .bar{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; font-size:12px; color:#bfefff}
-    .link{color:#bfefff; text-decoration:none}
-    .tools{display:flex; gap:8px}
-    .btn{padding:6px 10px; border-radius:8px; border:1px solid rgba(255,255,255,.2); background:transparent; color:#bfefff; cursor:pointer}
-    .btn:hover{border-color:var(--neon); color:var(--neon)}
+    .time{ display:block; opacity:.7; font-size:11px; margin-top:6px }
+    .toolbar{
+      padding:10px; display:flex; gap:8px; border-top:1px solid rgba(0,247,255,.25); background:#0e1a33;
+    }
+    .toolbar button, .toolbar .clean{
+      background:rgba(0,247,255,.12); color:#fff; border:1px solid rgba(0,247,255,.35);
+      border-radius:10px; padding:8px 10px; cursor:pointer; font-weight:700
+    }
+    .toolbar button:hover{ background:rgba(0,247,255,.22) }
+    #composer{
+      display:flex; border-top:1px solid rgba(0,247,255,.25); background:#0b1731;
+      gap:8px; padding:10px;
+    }
+    #messageInput{
+      flex:1; border:none; border-radius:12px; padding:12px 14px; font-size:15px; color:#fff;
+      background:rgba(0,0,0,.3); outline:none;
+    }
+    #sendBtn{
+      min-width:86px; border:none; border-radius:12px; background:var(--neon); color:#07111f;
+      font-weight:800; cursor:pointer;
+    }
+    #sendBtn:active{ transform:translateY(1px) }
+    .note{ color:#bdefff; font-size:12px; text-align:center; padding:8px 12px; opacity:.85 }
   </style>
-
-  <!-- Firebase (namespaced) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <!-- الهيدر -->
-    <header class="card">
-      <img class="logo" src="img/logo.png" alt="logo">
+    <header>
+      <img id="brandLogo" src="img/logo.png" alt="logo">
       <div class="titles">
-        <h1>الدعم الفني - شبكة الضياء-نت</h1>
-        <p>نخدمك على مدار الساعة</p>
+        <div class="title">الدعم الفني — شبكة الضياء-نت</div>
+        <div class="sub">مرحبا بك! أكتب استفسارك وسيتم الرد عليك.</div>
       </div>
-      <div class="online"><span class="dot"></span> متصل الآن</div>
+      <span class="chip" id="chipStatus">متصل</span>
     </header>
 
-    <!-- شريط علوي صغير -->
-    <div class="card bar">
-      <span>مرحباً! اكتب استفسارك وسيصلك الرد هنا مباشرةً.</span>
-      <div class="tools">
-        <button id="clearChat" class="btn" title="حذف محادثتي من هذا الجهاز فقط">حذف محادثتي</button>
-        <a class="link" href="tel:+967779175713">اتصال هاتفي</a>
-      </div>
+    <div id="messages"></div>
+
+    <div class="toolbar">
+      <button id="allowPush">تفعيل الإشعارات 🔔</button>
+      <button id="clearChat">حذف المحادثة 🗑️</button>
+      <span class="clean" id="chatIdBadge" title="معرّف محادثتك"></span>
     </div>
 
-    <!-- الرسائل -->
-    <div id="messages" class="card"></div>
-
-    <!-- إجراءات سريعة -->
-    <div class="card quick">
-      <button class="chip">مشكلة في الاتصال</button>
-      <button class="chip">استفسار عن الفاتورة</button>
-      <button class="chip">تغيير الباقة</button>
-      <button class="chip">إعدادات الراوتر</button>
+    <div id="composer">
+      <input id="messageInput" type="text" placeholder="اكتب رسالتك هنا…" autocomplete="off" />
+      <button id="sendBtn">إرسال</button>
     </div>
 
-    <!-- الإدخال -->
-    <div class="input card">
-      <textarea id="messageInput" placeholder="اكتب رسالتك هنا..."></textarea>
-      <button id="sendBtn" class="send">إرسال</button>
-    </div>
-
-    <!-- لوج أخطاء واضح على الصفحة (يساعدنا لو صار شيء) -->
-    <div id="errorLog" class="card" style="padding:10px; color:#ffdddd; background:#2b1a1a; border-color:#b33;">لا توجد أخطاء.</div>
+    <div class="note">🚀 ستصلك إشعارات عند ردّ الدعم حتى وأنت خارج الصفحة.</div>
   </div>
 
-  <!-- صوت تنبيه (عدّل الاسم لو عندك ملف مختلف) -->
-  <audio id="ping" src="notification.mp3" preload="auto"></audio>
+  <!-- Firebase v12 (ESM) -->
+  <script type="module">
+    /***** إعدادات بعناوين قابلة للتعديل *****/
+    const VAPID_KEY = "BCtAdlmYCinSR7QmgiZzkz2hNg8_pfQJYWyLV1R3RmnnELxUUQST6rPwjRovxl40-DSundiW-n30C-Dt3_ICD88"; // ← كما أعطيتني
+    const LOGO_PATH = "img/logo.png";        // غيرها لو تبغى
+    const SOUND_PATH = "notification.mp3";   // غير الاسم لو عندك ملف صوت آخر
 
-<script>
-(function(){
-  // ===== 1) تهيئة Firebase (لا تلمس) =====
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
-    authDomain: "support-chat-31aa6.firebaseapp.com",
-    databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "support-chat-31aa6",
-    storageBucket: "support-chat-31aa6.appspot.com",
-    messagingSenderId: "1079004120541",
-    appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
-    measurementId: "G-8NNELSESB8"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    /***** Imports *****/
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+    import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-messaging.js";
 
-  // ===== 2) chatId ثابت لكل متصفح =====
-  let chatId = localStorage.getItem("chatId");
-  if (!chatId) {
-    chatId = Math.random().toString(36).slice(2, 11);
-    localStorage.setItem("chatId", chatId);
-  }
+    /***** Firebase Config *****/
+    const firebaseConfig = {
+      apiKey: "AIzaSyAwjmWIOyvGKUAXqDKpzpouZ-MlyuhYjMc",
+      authDomain: "support-chat-31aa6.firebaseapp.com",
+      databaseURL: "https://support-chat-31aa6-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "support-chat-31aa6",
+      storageBucket: "support-chat-31aa6.appspot.com",
+      messagingSenderId: "1079004120541",
+      appId: "1:1079004120541:web:4a11ee42427c6e9be1e234",
+      measurementId: "G-8NNELSESB8"
+    };
 
-  // مراجع قاعدة البيانات
-  const messagesRef = db.ref('supportMessages/' + chatId);
-  const tokenRef    = db.ref('userTokens/' + chatId);
+    /***** تهيئة *****/
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  // عناصر الصفحة
-  const messagesDiv   = document.getElementById('messages');
-  const inputEl       = document.getElementById('messageInput');
-  const sendBtn       = document.getElementById('sendBtn');
-  const clearBtn      = document.getElementById('clearChat');
-  const errorLog      = document.getElementById('errorLog');
-  const pingAudio     = document.getElementById('ping');
-
-  // ===== 3) عرض الرسائل الموجودة والجديدة =====
-  function addBubble(sender, text, ts){
-    const div = document.createElement('div');
-    div.className = 'bubble ' + (sender === 'user' ? 'user' : 'admin');
-    const time = ts ? new Date(ts) : new Date();
-    const hh = String(time.getHours()).padStart(2,'0');
-    const mm = String(time.getMinutes()).padStart(2,'0');
-    div.innerHTML = `${escapeHtml(text)}<span class="time">${hh}:${mm}</span>`;
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    if(sender === 'admin'){
-      // صوت بسيط عند وصول رد من الدعم
-      pingAudio.currentTime = 0;
-      pingAudio.play().catch(()=>{});
+    // chatId محفوظ في المتصفح لكل زبون
+    let chatId = localStorage.getItem("chatId");
+    if (!chatId) {
+      chatId = Math.random().toString(36).slice(2, 11);
+      localStorage.setItem("chatId", chatId);
     }
-  }
+    document.getElementById('chatIdBadge').textContent = `ID: ${chatId}`;
 
-  function escapeHtml(s){
-    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
+    // مراجع القاعدة
+    const chatRef = ref(db, `supportMessages/${chatId}`);
 
-  // تحميل قديم + الاستماع للجديد
-  messagesRef.off();
-  messagesRef.on('child_added', snap => {
-    const msg = snap.val();
-    if(!msg) return;
-    addBubble(msg.sender, msg.message, msg.timestamp);
-  });
+    // عناصر DOM
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearChat');
+    const allowPushBtn = document.getElementById('allowPush');
 
-  // ===== 4) إرسال الرسالة (يبقى شغال حتى لو الإشعارات فشلت) =====
-  async function sendMessage(){
-    const text = (inputEl.value || '').trim();
-    if(!text) return;
-    sendBtn.disabled = true;
-    try{
-      await messagesRef.push({
-        sender:'user',
-        message:text,
-        timestamp: Date.now()
-      });
-      inputEl.value = '';
-      inputEl.focus();
-    }catch(e){
-      showErr('فشل إرسال الرسالة: ' + (e && e.message ? e.message : e));
-    }finally{
-      sendBtn.disabled = false;
+    // صوت تنبيه (اختياري)
+    let ping;
+    try { ping = new Audio(SOUND_PATH); } catch(e){}
+
+    // عرض رسالة فورية
+    function showMessage({sender, message, timestamp}) {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${sender === 'admin' ? 'admin' : 'user'}`;
+      bubble.innerHTML = `${escapeHtml(message)}<span class="time">${formatTime(timestamp)}</span>`;
+      messagesDiv.appendChild(bubble);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      if (sender === 'admin' && ping) { ping.play().catch(()=>{}); }
     }
-  }
-
-  sendBtn.addEventListener('click', sendMessage);
-  inputEl.addEventListener('keydown', e=>{
-    if(e.key === 'Enter' && !e.shiftKey){
-      e.preventDefault();
-      sendMessage();
+    function escapeHtml(s=''){
+      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     }
-  });
+    function formatTime(t){
+      const d = t ? new Date(t) : new Date();
+      let h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0');
+      const ampm = h>=12 ? 'م' : 'ص'; h = h%12 || 12;
+      return `${h}:${m} ${ampm}`;
+    }
 
-  // أزرار سريعة
-  document.querySelectorAll('.chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      inputEl.value = chip.textContent.trim();
-      inputEl.focus();
+    // الاستماع للرسائل الجديدة (هذه المحادثة فقط)
+    onChildAdded(chatRef, snap => {
+      const data = snap.val();
+      if (!data) return;
+      showMessage(data);
     });
-  });
 
-  // حذف محادثتي من هذا المتصفح فقط
-  clearBtn.addEventListener('click', ()=>{
-    if(confirm('سيتم حذف محادثتك من هذا المتصفح فقط (لن تُحذف من النظام). المتابعة؟')){
-      localStorage.removeItem('chatId');
-      // إعادة تحميل بchatId جديد
-      location.reload();
-    }
-  });
-
-  // ===== 5) إشعارات المتصفح (اختيارية وآمنة) =====
-  (async function setupNotificationsSafe(){
-    // لا نسمح لأي خطأ هنا يوقف الصفحة
-    try{
-      // لازم https + Service Worker بالمسار الجذري
-      if(!('serviceWorker' in navigator)) return;        // غير مدعوم
-      if(!(window.isSecureContext)) return;              // لازم https
-      // تسجيل SW
-      await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-
-      // قد لا يدعم المتصفح FCM بشكل كامل؛ نجرب بحذر
-      let messaging;
+    // إرسال رسالة
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      sendBtn.disabled = true;
       try{
-        messaging = firebase.messaging();
-      }catch(_){ /* فايرفوكس موبايل أحياناً يرمي خطأ */ return; }
-
-      // طلب الإذن
-      const perm = await Notification.requestPermission();
-      if(perm !== 'granted') return;
-
-      // اجلب التوكن وخزّنه تحت userTokens/chatId
-      const vapidKey = 'BCtAdlmYCinSR7QmgiZzkz2hNg8_pfQJYWyLV1R3RmnnELxUUQST6rPwjRovxl40-DSundiW-n30C-Dt3_ICD88';    
-      const token = await messaging.getToken({ vapidKey });
-      if(token){
-        await tokenRef.set(token);
+        await push(chatRef, {
+          sender: 'user',
+          message: text,
+          timestamp: Date.now()
+        });
+        input.value = "";
+      } catch(err){
+        alert('تعذّر إرسال الرسالة. تحقق من الإنترنت ثم أعد المحاولة.');
+        console.error(err);
+      } finally{
+        sendBtn.disabled = false;
+        input.focus();
       }
-      // إشعار لحظي داخل الصفحة (عندما تكون مفتوحة)
-      messaging.onMessage(payload=>{
-        try{
-          const body = payload?.notification?.body || 'رسالة جديدة';
-          // تنبيه بسيط
-          pingAudio.currentTime = 0;
-          pingAudio.play().catch(()=>{});
-          // بانر متصفح (اختياري)
-          if(navigator.serviceWorker && Notification.permission === 'granted'){
-            navigator.serviceWorker.getRegistration().then(reg=>{
-              reg?.showNotification('رد جديد من الدعم الفني', { body });
-            });
-          }
-        }catch(_){}
-      });
-    }catch(e){
-      // لا نفعل شيئاً سوى تسجيل الخطأ بصمت
-      console.warn('Notifications disabled:', e);
     }
-  })();
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', e=>{
+      if (e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+      }
+    });
 
-  // ===== 6) لوج أخطاء على الصفحة (لا يوقف التنفيذ) =====
-  function showErr(msg){
-    errorLog.textContent = 'خطأ: ' + msg;
-  }
-  window.addEventListener('error', e=> showErr(e.message));
-  window.addEventListener('unhandledrejection', e=> showErr(e.reason?.message || String(e.reason)));
-})();
-</script>
+    // حذف محادثتي فقط
+    clearBtn.addEventListener('click', async ()=>{
+      if (!confirm('سيتم حذف محادثتك من الخادم. هل أنت متأكد؟')) return;
+      try{
+        await remove(chatRef);
+        messagesDiv.innerHTML = "";
+      } catch(e){
+        alert('تعذّر الحذف الآن'); console.error(e);
+      }
+    });
+
+    // تسجيل Service Worker + تفعيل الإشعارات + حفظ التوكن
+    async function enablePush() {
+      try{
+        // لازم يكون ملف SW في نفس الأصل والمسار صحيح
+        await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        console.log('SW registered');
+
+        if (!(await isSupported())) {
+          alert('المتصفح لا يدعم إشعارات الويب على هذا الجهاز.');
+          return;
+        }
+
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          alert('لم يتم منح الإذن للإشعارات.');
+          return;
+        }
+
+        const messaging = getMessaging(app);
+        const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready });
+        if (token) {
+          console.log('FCM token', token);
+          // خزّن التوكن لهذا المستخدم
+          const tokenRef = ref(db, `userTokens/${chatId}`);
+          // استخدام fetch لكتابة بسيطة بدون استيراد إضافي — لكن عندنا DB جاهز، نقدر نستخدم push/ set عبر REST أو نضيف import set:
+        } else {
+          alert('لم يتم الحصول على توكن FCM.');
+        }
+      } catch(err){
+        console.error('Push error', err);
+        alert('تعذّر تفعيل الإشعارات.');
+      }
+    }
+
+    // بما أننا لم نستورد set صراحة فوق، نضيفه هنا ونستخدمه
+    import("https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js").then(({set})=>{
+      allowPushBtn.addEventListener('click', async ()=>{
+        try{
+          await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+          const permission = await Notification.requestPermission();
+          if (permission !== 'granted') { alert('إذن الإشعارات مرفوض.'); return; }
+          const messaging = getMessaging(app);
+          const reg = await navigator.serviceWorker.ready;
+          const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+          if (!token){ alert('لم يتم الحصول على التوكن.'); return; }
+          await set(ref(db, `userTokens/${chatId}`), token);
+          alert('✅ تم تفعيل الإشعارات بنجاح!');
+        }catch(e){
+          console.error(e); alert('تعذّر تفعيل الإشعارات.');
+        }
+      });
+    });
+
+    // مبدئيًا: أظهر الشعار من المتغير
+    document.getElementById('brandLogo').src = LOGO_PATH;
+  </script>
 </body>
 </html>
