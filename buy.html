@@ -248,7 +248,7 @@
       if(perm !== 'granted') return;
 
       // اجلب التوكن وخزّنه تحت userTokens/chatId
-      const vapidKey = 'ضع_مفتاح_VAPID_العلني_هنا'; // استبدلها بمفتاحك العام
+      const vapidKey = 'BCtAdlmYCinSR7QmgiZzkz2hNg8_pfQJYWyLV1R3RmnnELxUUQST6rPwjRovxl40-DSundiW-n30C-Dt3_ICD88';    
       const token = await messaging.getToken({ vapidKey });
       if(token){
         await tokenRef.set(token);
